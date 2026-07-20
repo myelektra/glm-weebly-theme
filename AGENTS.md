@@ -21,7 +21,10 @@ Two separate outputs share same design/logo/content.
     ├── sync-logo.mjs       # Copy logo → weebly-theme, replace SVG refs
     ├── add-footer.mjs      # Inject footer into weebly html files
     ├── seo-optimize.mjs    # Add meta/OG/schema/main tags
-    └── upload-logos.mjs    # Upload images to catbox.moe CDN
+    ├── upload-logos.mjs    # Upload images to catbox.moe CDN
+    ├── hide-how-it-works.mjs   # Remove How It Works nav links (keep page)
+    ├── add-contact-nav.mjs     # Add Contact Us dropdown to all pages
+    └── reorder-contact-nav.mjs # Move Contact Us after About in nav
 ```
 
 ## Build Commands
@@ -51,6 +54,20 @@ See `scripts/upload-logos.mjs` and inline `<script>` in `index.html`.
 - React Header.tsx uses PNG + "myelektra.com" (black + blue #1877F2)
 - "myelektra" 2x height of ".com" (28px vs 14px, baseline-aligned)
 - Weebly footers: PT. Myelektra Solusi Indonesia + +62 21 29636761 added
+- Footer "How It Works" link removed (2025-07)
+
+## Navigation
+- **Desktop nav order:** Home, Solutions (dropdown), Industries, Pricing, Academy, About, Contact Us (dropdown)
+- **Contact Us submenu:** Get Quote Here → `/get-quote-here-new`, Book Online Meeting → `/consultation`
+- **How It Works** hidden from nav menus (both desktop & mobile), page still accessible via direct URL
+- **Mobile nav:** same order, submenus rendered as toggleable sections
+
+## HubSpot Integrations
+- **Consultation page** (`/consultation`): HubSpot Meetings embed (`MeetingsEmbedCode.js`) replaces old form
+- **Get Quote page** (`/get-quote-here-new`): HubSpot Forms embed (portal `3306812`, form `a5276c78-f3c3-4eb1-9434-7d359384f6b0`)
+
+## Contact Page
+- `contact-new.html` / React `/contact`: corporate office address, PT. Myelektra Solusi Indonesia, phone, hours (Weekdays 9:00–18:00), Google Maps embed pointing to 88 Office
 
 ## SEO / GEO / AIO
 All HTML files have: meta description, OG tags, Twitter Card, canonical URL, JSON-LD schema per page type, `<main>` wrapper.

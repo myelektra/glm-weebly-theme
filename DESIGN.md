@@ -13,7 +13,19 @@ Simple custom theme format (not Developer Theme):
 - `index.html` — main template (all sections inline)
 - `main_style.css` — all styles
 - No subdirectories in zip (Weebly ignores subfolders)
-- 13 HTML pages total
+- 14 HTML pages total (not counting client_* image files)
+
+## Navigation
+
+### Desktop Nav Order
+`Home → Solutions (dropdown) → Industries → Pricing → Academy → About → Contact Us (dropdown)`
+
+### Contact Us Dropdown
+- **Get Quote Here** → `get-quote-here-new.html` (HubSpot form)
+- **Book Online Meeting** → `consultation.html` (HubSpot Meetings)
+
+### How It Works
+Hidden from all nav menus (desktop & mobile). Page remains accessible via direct URL.
 
 ## Design Decisions
 
@@ -36,11 +48,22 @@ Simple custom theme format (not Developer Theme):
 
 ### Footer
 - 4 columns: Brand, Solutions, Company, Contact
-- Contact: PT. Myelektra Solusi Indonesia, +62 21 29636761, Book a Consultation
-- Consistent across all 13 HTML pages
+- Company: About, Industries, Academy (How It Works removed 2025-07)
+- Contact: PT. Myelektra Solusi Indonesia, +62 21 29636761, Get Quote Here, Book Online Meeting, Book a Consultation
+- Consistent across all HTML pages
 - Footer injected via `scripts/add-footer.mjs`
 
-### SEO Schema
+### HubSpot Integrations
+- **Consultation** → HubSpot Meetings embed (no form)
+- **Get Quote Here** → HubSpot Forms embed (portal 3306812)
+
+### Contact Page (`contact-new.html` / React `/contact`)
+- Corporate office: 38th Floor, 88 Office, Kota Kasablanka, South Jakarta, Indonesia
+- Contact: PT. Myelektra Solusi Indonesia, +62 21 29636761
+- Hours: Weekdays 9:00–18:00
+- Google Maps iframe pointing to 88 Office
+
+## SEO Schema
 Per-page JSON-LD schemas:
 | Page | Schema |
 |------|--------|
@@ -49,9 +72,10 @@ Per-page JSON-LD schemas:
 | Academy | Course |
 | Consultation | Service + Offer |
 | How It Works | HowTo |
+| Contact | ContactPage |
 | Solutions | ItemList |
 | Solutions detail | Service |
-| Industries, Pricing | WebPage |
+| Industries, Pricing, Get Quote | WebPage |
 
 ## Image Hosting
 catbox.moe (free, no signup, direct links).  

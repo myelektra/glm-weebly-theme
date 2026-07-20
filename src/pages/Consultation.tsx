@@ -1,28 +1,19 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { AnimateOnScroll } from '../components/ScrollAnimations';
-import { ArrowRightIcon, CheckIcon, ShieldIcon, ClockIcon, solutionIconMap } from '../components/Icons';
+import { ShieldIcon, ClockIcon, solutionIconMap } from '../components/Icons';
 import { solutions } from '../data/content';
 
 const Consultation: React.FC = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    company: '',
-    country: '',
-    solution: '',
-    message: ''
-  });
-  const [submitted, setSubmitted] = useState(false);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitted(true);
-  };
+  useEffect(() => {
+    if (!document.querySelector('script[src*="MeetingsEmbedCode.js"]')) {
+      const script = document.createElement('script');
+      script.src = 'https://static.hsappstatic.net/MeetingsEmbed/ex/MeetingsEmbedCode.js';
+      script.type = 'text/javascript';
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  }, []);
 
   return (
     <div>
@@ -48,146 +39,22 @@ const Consultation: React.FC = () => {
       <section className="bg-white py-20 lg:py-28">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            {/* Form */}
+            {/* Meetings Embed */}
             <div className="lg:col-span-2">
               <AnimateOnScroll>
                 <h2 className="text-2xl font-bold text-text-primary mb-2" style={{ fontFamily: 'var(--font-heading)' }}>
                   Schedule Your Discovery Session
                 </h2>
                 <p className="text-text-secondary mb-8">
-                  Fill out the form below and our team will reach out to schedule your consultation.
+                  Pick a time that works for you below.
                 </p>
               </AnimateOnScroll>
-
-              {submitted ? (
-                <AnimateOnScroll>
-                  <div className="bg-teal/5 border border-teal/20 rounded-2xl p-8 text-center">
-                    <div className="w-16 h-16 bg-teal/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <CheckIcon size={32} className="text-teal" />
-                    </div>
-                    <h3 className="text-xl font-bold text-text-primary mb-2" style={{ fontFamily: 'var(--font-heading)' }}>
-                      Thank You!
-                    </h3>
-                    <p className="text-text-secondary">
-                      Your consultation request has been submitted. Our team will reach out within 1-2 business days to schedule your discovery session.
-                    </p>
-                  </div>
-                </AnimateOnScroll>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-5">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    <div>
-                      <label htmlFor="name" className="block text-sm font-medium text-text-primary mb-1.5">
-                        Full Name <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        required
-                        value={formData.name}
-                        onChange={handleChange}
-                        className="w-full px-4 py-3 border border-border rounded-lg text-text-primary bg-white focus:ring-2 focus:ring-blue focus:border-blue transition-colors"
-                        placeholder="Your full name"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="email" className="block text-sm font-medium text-text-primary mb-1.5">
-                        Work Email <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        required
-                        value={formData.email}
-                        onChange={handleChange}
-                        className="w-full px-4 py-3 border border-border rounded-lg text-text-primary bg-white focus:ring-2 focus:ring-blue focus:border-blue transition-colors"
-                        placeholder="you@company.com"
-                      />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    <div>
-                      <label htmlFor="company" className="block text-sm font-medium text-text-primary mb-1.5">
-                        Company Name <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        id="company"
-                        name="company"
-                        required
-                        value={formData.company}
-                        onChange={handleChange}
-                        className="w-full px-4 py-3 border border-border rounded-lg text-text-primary bg-white focus:ring-2 focus:ring-blue focus:border-blue transition-colors"
-                        placeholder="Your company"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="country" className="block text-sm font-medium text-text-primary mb-1.5">
-                        Target Country
-                      </label>
-                      <select
-                        id="country"
-                        name="country"
-                        value={formData.country}
-                        onChange={handleChange}
-                        className="w-full px-4 py-3 border border-border rounded-lg text-text-primary bg-white focus:ring-2 focus:ring-blue focus:border-blue transition-colors"
-                      >
-                        <option value="">Select a country</option>
-                        <option value="Indonesia">Indonesia</option>
-                        <option value="Malaysia">Malaysia</option>
-                        <option value="Singapore">Singapore</option>
-                        <option value="Australia">Australia</option>
-                        <option value="Europe">Europe</option>
-                        <option value="United States">United States</option>
-                        <option value="Middle East">Middle East</option>
-                        <option value="Other">Other</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div>
-                    <label htmlFor="solution" className="block text-sm font-medium text-text-primary mb-1.5">
-                      Solution of Interest
-                    </label>
-                    <select
-                      id="solution"
-                      name="solution"
-                      value={formData.solution}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 border border-border rounded-lg text-text-primary bg-white focus:ring-2 focus:ring-blue focus:border-blue transition-colors"
-                    >
-                      <option value="">Select a solution</option>
-                      {solutions.map(s => (
-                        <option key={s.id} value={s.id}>{s.name}</option>
-                      ))}
-                      <option value="academy">Myelektra Academy</option>
-                      <option value="not-sure">Not sure yet</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label htmlFor="message" className="block text-sm font-medium text-text-primary mb-1.5">
-                      Tell us about your goals
-                    </label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      rows={4}
-                      value={formData.message}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 border border-border rounded-lg text-text-primary bg-white focus:ring-2 focus:ring-blue focus:border-blue transition-colors resize-y"
-                      placeholder="What are your current revenue growth challenges?"
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    className="inline-flex items-center px-8 py-3.5 bg-teal text-white font-semibold rounded-lg hover:bg-teal-hover transition-colors btn-transition"
-                  >
-                    Submit Consultation Request
-                    <ArrowRightIcon size={18} className="ml-2" />
-                  </button>
-                </form>
-              )}
+              <AnimateOnScroll stagger={1}>
+                <div
+                  className="meetings-iframe-container"
+                  data-src="https://app.hubspot.com/meetings/admin110/online-meeting-with-myelektra-?embed=true"
+                />
+              </AnimateOnScroll>
             </div>
 
             {/* Sidebar */}

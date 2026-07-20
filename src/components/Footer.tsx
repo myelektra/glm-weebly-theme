@@ -68,7 +68,6 @@ export const Footer: React.FC = () => {
             <ul className="space-y-2.5">
               <li><Link to="/about" className="text-text-dark/60 hover:text-teal text-sm transition-colors">About</Link></li>
               <li><Link to="/industries" className="text-text-dark/60 hover:text-teal text-sm transition-colors">Industries</Link></li>
-              <li><Link to="/how-it-works" className="text-text-dark/60 hover:text-teal text-sm transition-colors">How It Works</Link></li>
               <li><Link to="/academy" className="text-text-dark/60 hover:text-teal text-sm transition-colors">Academy</Link></li>
             </ul>
           </div>
@@ -82,6 +81,12 @@ export const Footer: React.FC = () => {
                 <a href="tel:+622129636761" className="text-text-dark/60 hover:text-teal text-sm transition-colors">
                   +62 21 29636761
                 </a>
+              </li>
+              <li>
+                <Link to="/get-quote-here-new" className="text-text-dark/60 hover:text-teal text-sm transition-colors">Get Quote Here</Link>
+              </li>
+              <li>
+                <Link to="/consultation" className="text-text-dark/60 hover:text-teal text-sm transition-colors">Book Online Meeting</Link>
               </li>
               <li>
                 <Link to="/consultation" className="text-teal hover:text-teal-hover text-sm font-medium transition-colors">

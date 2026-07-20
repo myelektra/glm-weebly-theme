@@ -11,10 +11,17 @@ const navLinks = [
     submenu: solutions.map(s => ({ label: s.name, path: `/solutions/${s.id}` }))
   },
   { label: 'Industries', path: '/industries' },
-  { label: 'How It Works', path: '/how-it-works' },
   { label: 'Pricing', path: '/pricing' },
   { label: 'Academy', path: '/academy' },
   { label: 'About', path: '/about' },
+  {
+    label: 'Contact Us',
+    path: '/contact',
+    submenu: [
+      { label: 'Get Quote Here', path: '/get-quote-here-new' },
+      { label: 'Book Online Meeting', path: '/consultation' },
+    ]
+  },
 ];
 
 export const Header: React.FC = () => {
