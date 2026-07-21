@@ -518,7 +518,7 @@ function renderPreview() {
     html += '<div class="preview-section-title" style="margin-bottom:12px">' + escapeHtml(getPreviewVal('solutionsPage.hero.headline')) + '</div>';
     html += '<p class="preview-text" style="margin-bottom:16px">' + escapeHtml(getPreviewVal('solutionsPage.hero.subtitle')) + '</p>';
     for (var i = 0; i < 5; i++) {
-      html += '<div class="preview-card"' + (getPreviewVal('solutions.' + i + '.isPopular') == true ? ' style="border-color:#FFB800"' : '') + '>';
+      html += '<div class="preview-card"' + (String(getPreviewVal('solutions.' + i + '.isPopular')) === 'true' ? ' style="border-color:#FFB800"' : '') + '>';
       html += '<div class="preview-card-title">' + escapeHtml(getPreviewVal('solutions.' + i + '.name')) + '</div>';
       html += '<div class="preview-price">' + escapeHtml(getPreviewVal('solutions.' + i + '.price')) + '</div>';
       html += '<div class="preview-card-desc">' + escapeHtml(getPreviewVal('solutions.' + i + '.description')) + '</div>';
