@@ -252,6 +252,67 @@ body {
   .topbar h1 { font-size: 14px; }
 }
 
+/* ─── Preview Panel ─── */
+.editor-with-preview { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.editor-with-preview #editor-content { max-height: 70vh; overflow-y: auto; padding-right: 4px; }
+.preview-panel {
+  background: #0F1B2D; border-radius: 10px; overflow: hidden;
+  position: sticky; top: 80px; max-height: calc(100vh - 120px);
+  display: flex; flex-direction: column;
+}
+.preview-header {
+  background: rgba(255,255,255,0.06); padding: 10px 16px;
+  display: flex; align-items: center; gap: 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.08); flex-shrink: 0;
+}
+.preview-header span { font-size: 11px; color: rgba(255,255,255,0.5); font-weight: 500; }
+.preview-header .dot { width: 8px; height: 8px; border-radius: 50%; background: #00C896; }
+.preview-body {
+  padding: 24px; overflow-y: auto; flex: 1;
+  font-family: 'Inter', -apple-system, sans-serif;
+}
+.preview-body .section-label { font-size: 11px; color: #00C896; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+.preview-body h1.preview-headline { font-size: 28px; font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 12px; }
+.preview-body h1.preview-headline .gradient-text { background: linear-gradient(135deg, #1A73E8, #00C896); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.preview-body .preview-subtitle { font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.6; margin-bottom: 16px; }
+.preview-body .preview-cta-group { display: flex; gap: 10px; flex-wrap: wrap; }
+.preview-body .preview-cta-primary { background: #00C896; color: #0F1B2D; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; border: none; cursor: default; }
+.preview-body .preview-cta-secondary { background: transparent; border: 1px solid rgba(255,255,255,0.3); color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: default; }
+.preview-body .preview-badge { display: inline-block; background: rgba(0,200,150,0.15); color: #00C896; font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px; margin-bottom: 12px; }
+.preview-body .preview-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 16px 0; }
+.preview-body .preview-stat { display: inline-block; text-align: center; padding: 12px 20px; }
+.preview-body .preview-stat-value { font-size: 24px; font-weight: 800; color: #1A73E8; }
+.preview-body .preview-stat-label { font-size: 11px; color: rgba(255,255,255,0.5); }
+.preview-body .preview-section-title { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+.preview-body .preview-text { font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5; }
+.preview-body .preview-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 14px; margin-bottom: 10px; }
+.preview-body .preview-card-title { font-size: 14px; font-weight: 600; color: #fff; margin-bottom: 4px; }
+.preview-body .preview-card-desc { font-size: 12px; color: rgba(255,255,255,0.5); }
+.preview-body .preview-features { list-style: none; padding: 0; }
+.preview-body .preview-features li { font-size: 12px; color: rgba(255,255,255,0.6); padding: 4px 0; padding-left: 16px; position: relative; }
+.preview-body .preview-features li::before { content: '✓'; position: absolute; left: 0; color: #00C896; font-weight: 700; }
+.preview-body .preview-price { font-size: 16px; font-weight: 700; color: #00C896; margin: 6px 0; }
+.preview-body .preview-bestfor { font-size: 11px; color: rgba(255,255,255,0.4); font-style: italic; margin-top: 6px; }
+.preview-body .preview-persona { display: inline-block; background: rgba(26,115,232,0.2); color: #7ab3ff; font-size: 11px; padding: 3px 8px; border-radius: 4px; margin: 2px; }
+.preview-body .preview-step { display: flex; gap: 12px; margin-bottom: 12px; }
+.preview-body .preview-step-num { width: 24px; height: 24px; border-radius: 50%; background: #1A73E8; color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.preview-body .preview-step-content { flex: 1; }
+.preview-body .preview-step-title { font-size: 13px; font-weight: 600; color: #fff; }
+.preview-body .preview-step-desc { font-size: 11px; color: rgba(255,255,255,0.5); }
+.preview-body .preview-country-card { display: inline-block; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 10px 14px; margin: 4px; }
+.preview-body .preview-country-name { font-size: 13px; font-weight: 600; color: #fff; }
+.preview-body .preview-empty { display: flex; align-items: center; justify-content: center; height: 200px; color: rgba(255,255,255,0.3); font-size: 14px; text-align: center; flex-direction: column; gap: 8px; }
+.preview-body .preview-empty .icon { font-size: 32px; }
+
+.btn-preview { background: #8B5CF6; color: #fff; }
+.btn-preview:hover { background: #7C3AED; }
+.btn-preview.active { background: #6D28D9; box-shadow: 0 0 0 2px rgba(139,92,246,0.4); }
+
+@media (max-width: 900px) {
+  .editor-with-preview { grid-template-columns: 1fr; }
+  .preview-panel { position: static; max-height: none; }
+}
+
 /* ─── Back to top (editor scroll) ─── */
 .editor-scroll-top {
   position: fixed; bottom: 70px; right: 20px;
@@ -316,8 +377,25 @@ body {
       <h2 id="editor-title"></h2>
       <div style="flex:1"></div>
       <span id="unsaved-indicator" class="hidden"></span>
+      <button class="btn btn-preview btn-sm" onclick="togglePreview()" id="btn-preview">👁 Preview</button>
     </div>
-    <div id="editor-content"></div>
+    <div id="editor-with-preview">
+      <div id="editor-content"></div>
+      <div id="preview-panel" class="preview-panel hidden">
+        <div class="preview-header">
+          <div class="dot"></div>
+          <span>Live Preview</span>
+          <span style="margin-left:auto;font-size:10px;color:rgba(255,255,255,0.3)">updates as you type</span>
+        </div>
+        <div class="preview-body" id="preview-body">
+          <div class="preview-empty">
+            <div class="icon">👁</div>
+            <div>Select a page to preview</div>
+            <div style="font-size:11px">Changes update in real-time as you edit</div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Developer Zone -->
     <div class="dev-zone">
@@ -368,6 +446,154 @@ let isDirty = false;         // Unsaved changes?
 let currentPage = null;      // Currently edited page name (null = dashboard)
 let searchResults = [];      // Global search results
 let devModeVisible = false;  // Dev options expanded?
+let previewVisible = false;  // Preview panel visible?
+
+// ═══════════════════════════════════════════════════════════════════
+// Live Preview
+// ═══════════════════════════════════════════════════════════════════
+function togglePreview() {
+  previewVisible = !previewVisible;
+  const panel = document.getElementById('preview-panel');
+  const container = document.getElementById('editor-with-preview');
+  const btn = document.getElementById('btn-preview');
+  panel.classList.toggle('hidden', !previewVisible);
+  container.classList.toggle('editor-with-preview', previewVisible);
+  btn.classList.toggle('active', previewVisible);
+  btn.textContent = previewVisible ? '👁 Hide Preview' : '👁 Preview';
+  if (previewVisible && currentPage) {
+    renderPreview();
+  }
+}
+
+function getPreviewVal(path) {
+  const raw = flatData[path];
+  if (raw !== undefined) return raw;
+  const val = resolvePath(config, path);
+  return val !== undefined ? val : '';
+}
+
+function renderPreview() {
+  const body = document.getElementById('preview-body');
+  if (!currentPage) {
+    body.innerHTML = '<div class="preview-empty"><div class="icon">👁</div><div>Select a page to preview</div></div>';
+    return;
+  }
+  
+  let html = '';
+  const pageName = currentPage;
+  
+  // ── Homepage Preview ──
+  if (pageName === 'Homepage') {
+    html += '<div class="preview-badge">' + escapeHtml(getPreviewVal('homepage.hero.badge')) + '</div>';
+    var headline = getPreviewVal('homepage.hero.headline');
+    var highlight = getPreviewVal('homepage.hero.headlineHighlight');
+    if (headline && highlight && headline.includes(highlight)) {
+      headline = escapeHtml(headline).split(escapeHtml(highlight)).join('<span class="gradient-text">' + escapeHtml(highlight) + '</span>');
+    } else {
+      headline = escapeHtml(headline);
+    }
+    html += '<h1 class="preview-headline">' + headline + '</h1>';
+    html += '<p class="preview-subtitle">' + escapeHtml(getPreviewVal('homepage.hero.subtitle')) + '</p>';
+    html += '<div class="preview-cta-group">';
+    html += '<span class="preview-cta-primary">' + escapeHtml(getPreviewVal('homepage.hero.ctaPrimary.label')) + '</span>';
+    html += '<span class="preview-cta-secondary">' + escapeHtml(getPreviewVal('homepage.hero.ctaSecondary.label')) + '</span>';
+    html += '</div>';
+    html += '<div class="preview-divider"></div>';
+    html += '<div class="preview-section-title">' + escapeHtml(getPreviewVal('homepage.journey.headline')) + '</div>';
+    html += '<p class="preview-text">' + escapeHtml(getPreviewVal('homepage.journey.intro')) + '</p>';
+    for (var i = 0; i < 3; i++) {
+      html += '<div class="preview-card">';
+      html += '<div class="preview-card-title">' + escapeHtml(getPreviewVal('homepage.journey.cards.' + i + '.title')) + '</div>';
+      html += '<div class="preview-card-desc">' + escapeHtml(getPreviewVal('homepage.journey.cards.' + i + '.description')) + '</div>';
+      html += '</div>';
+    }
+    html += '<div class="preview-divider"></div>';
+    html += '<div class="preview-section-title">' + escapeHtml(getPreviewVal('homepage.finalCta.headline')) + '</div>';
+    html += '<p class="preview-text">' + escapeHtml(getPreviewVal('homepage.finalCta.subheadline')) + '</p>';
+    html += '<div style="margin-top:12px"><span class="preview-cta-primary">' + escapeHtml(getPreviewVal('homepage.finalCta.ctaLabel')) + '</span></div>';
+  }
+  // ── Solutions Preview ──
+  else if (pageName === 'Solutions') {
+    html += '<div class="section-label">Solutions</div>';
+    html += '<div class="preview-section-title" style="margin-bottom:12px">' + escapeHtml(getPreviewVal('solutionsPage.hero.headline')) + '</div>';
+    html += '<p class="preview-text" style="margin-bottom:16px">' + escapeHtml(getPreviewVal('solutionsPage.hero.subtitle')) + '</p>';
+    for (var i = 0; i < 5; i++) {
+      html += '<div class="preview-card"' + (getPreviewVal('solutions.' + i + '.isPopular') == true ? ' style="border-color:#FFB800"' : '') + '>';
+      html += '<div class="preview-card-title">' + escapeHtml(getPreviewVal('solutions.' + i + '.name')) + '</div>';
+      html += '<div class="preview-price">' + escapeHtml(getPreviewVal('solutions.' + i + '.price')) + '</div>';
+      html += '<div class="preview-card-desc">' + escapeHtml(getPreviewVal('solutions.' + i + '.description')) + '</div>';
+      html += '<ul class="preview-features">';
+      for (var f = 0; f < 4; f++) {
+        var feat = getPreviewVal('solutions.' + i + '.features.' + f);
+        if (feat) html += '<li>' + escapeHtml(feat) + '</li>';
+      }
+      html += '</ul>';
+      html += '<div class="preview-bestfor">' + escapeHtml(getPreviewVal('solutions.' + i + '.bestFor')) + '</div>';
+      html += '</div>';
+    }
+  }
+  // ── About Page Preview ──
+  else if (pageName === 'About Page') {
+    html += '<div class="section-label">About Myelektra</div>';
+    html += '<h1 class="preview-headline">' + escapeHtml(getPreviewVal('aboutPage.hero.headline')) + '</h1>';
+    html += '<p class="preview-subtitle">' + escapeHtml(getPreviewVal('aboutPage.hero.subtitle')) + '</p>';
+    html += '<div class="preview-divider"></div>';
+    html += '<div class="preview-section-title">' + escapeHtml(getPreviewVal('aboutPage.story.headline')) + '</div>';
+    html += '<p class="preview-text">' + escapeHtml(getPreviewVal('aboutPage.story.paragraph1')) + '</p>';
+    html += '<div class="preview-divider"></div>';
+    html += '<div style="display:flex;gap:8px;flex-wrap:wrap">';
+    for (var i = 0; i < 4; i++) {
+      html += '<div class="preview-stat"><div class="preview-stat-value">' + escapeHtml(getPreviewVal('aboutPage.stats.' + i + '.value')) + '</div><div class="preview-stat-label">' + escapeHtml(getPreviewVal('aboutPage.stats.' + i + '.label')) + '</div></div>';
+    }
+    html += '</div>';
+  }
+  // ── Academy Preview ──
+  else if (pageName === 'Academy') {
+    html += '<div class="section-label">Academy</div>';
+    html += '<h1 class="preview-headline" style="font-size:24px">' + escapeHtml(getPreviewVal('academy.hero.headline')) + '</h1>';
+    html += '<p class="preview-subtitle">' + escapeHtml(getPreviewVal('academy.hero.subheadline')) + '</p>';
+    html += '<p class="preview-text">' + escapeHtml(getPreviewVal('academy.hero.description')) + '</p>';
+    html += '<div class="preview-divider"></div>';
+    html += '<div class="preview-section-title">' + escapeHtml(getPreviewVal('academy.topicsHeadline')) + '</div>';
+    for (var i = 0; i < 5; i++) {
+      html += '<div class="preview-step"><div class="preview-step-num">' + (i+1) + '</div><div class="preview-step-content"><div class="preview-step-title">' + escapeHtml(getPreviewVal('academy.topics.' + i)) + '</div></div></div>';
+    }
+  }
+  // ── Brand & Company Preview ──
+  else if (pageName === 'Brand & Company') {
+    html += '<div class="preview-section-title">' + escapeHtml(getPreviewVal('brand.company')) + '</div>';
+    html += '<div class="preview-badge" style="margin-top:8px">' + escapeHtml(getPreviewVal('brand.tagline')) + '</div>';
+    html += '<p class="preview-text" style="margin-top:8px">' + escapeHtml(getPreviewVal('brand.positioning')) + '</p>';
+    html += '<div class="preview-divider"></div>';
+    html += '<div class="preview-text"><strong style="color:#fff">Phone:</strong> ' + escapeHtml(getPreviewVal('brand.phone')) + '</div>';
+    html += '<div class="preview-text"><strong style="color:#fff">Address:</strong> ' + escapeHtml(getPreviewVal('brand.address.line1')) + ', ' + escapeHtml(getPreviewVal('brand.address.line2')) + '</div>';
+  }
+  // ── Generic Page Preview ──
+  else {
+    html += '<div class="section-label">' + escapeHtml(pageName) + '</div>';
+    // Try to find and display headline + subtitle fields
+    var pageDef = ADMIN_FIELD_MAP.find(function(p) { return p.page === pageName; });
+    if (pageDef) {
+      for (var s = 0; s < pageDef.sections.length; s++) {
+        var section = pageDef.sections[s];
+        html += '<div class="preview-divider"></div>';
+        html += '<div class="preview-section-title">' + escapeHtml(section.name) + '</div>';
+        for (var f = 0; f < section.fields.length; f++) {
+          var field = section.fields[f];
+          var val = getPreviewVal(field.path);
+          if (val) {
+            html += '<div style="margin-bottom:6px">';
+            html += '<div style="font-size:10px;color:rgba(255,255,255,0.3);text-transform:uppercase">' + escapeHtml(field.label) + '</div>';
+            html += '<div style="font-size:13px;color:rgba(255,255,255,0.8)">' + escapeHtml(val) + '</div>';
+            html += '</div>';
+          }
+        }
+      }
+    }
+  }
+  
+  body.innerHTML = html;
+}
 
 // ═══════════════════════════════════════════════════════════════════
 // Init
@@ -600,6 +826,7 @@ function openPage(pageName) {
       input.oninput = function() {
         flatData[this.dataset.path] = this.value;
         markDirty();
+        if (previewVisible) renderPreview();
       };
       row.appendChild(input);
       body.appendChild(row);
@@ -612,6 +839,9 @@ function openPage(pageName) {
       container.appendChild(group);
     }
   }
+
+  // Update preview if visible
+  if (previewVisible) renderPreview();
 
   // Reset dirty state
   isDirty = false;
