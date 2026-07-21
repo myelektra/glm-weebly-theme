@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Myelektra — Content Editor</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f6fa; color: #1a1a2e; }
+.topbar { background: #0f1b2d; color: #fff; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
+.topbar h1 { font-size: 18px; font-weight: 600; }
+.topbar .status { font-size: 12px; color: #8ba0c5; }
+.container { max-width: 960px; margin: 0 auto; padding: 24px; }
+.actions { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+.btn { padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; border: none; transition: all .2s; display: inline-flex; align-items: center; gap: 6px; }
+.btn-primary { background: #1877F2; color: #fff; }
+.btn-primary:hover { background: #1558b0; }
+.btn-outline { background: transparent; border: 1px solid #c4cbd8; color: #1a1a2e; }
+.btn-outline:hover { background: #eef0f4; }
+.btn-success { background: #00c896; color: #fff; }
+.btn-success:hover { background: #00a87a; }
+.btn-danger { background: #ef4444; color: #fff; }
+.btn-danger:hover { background: #dc2626; }
+.btn:disabled { opacity: .5; cursor: wait; }
+.section-group { background: #fff; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 16px; }
+.section-header { padding: 14px 20px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; user-select: none; }
+.section-header .arrow { transition: transform .2s; }
+.section-header.collapsed .arrow { transform: rotate(-90deg); }
+.section-body { padding: 16px 20px; }
+.section-body.hidden { display: none; }
+.field { margin-bottom: 14px; }
+.field:last-child { margin-bottom: 0; }
+.field label { display: block; font-size: 12px; font-weight: 600; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: .03em; word-break: break-all; }
+.field input, .field textarea { width: 100%; padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 14px; color: #1a1a2e; font-family: inherit; transition: border-color .2s; }
+.field input:focus, .field textarea:focus { outline: none; border-color: #1877F2; box-shadow: 0 0 0 3px rgba(24,119,242,.1); }
+.field textarea { min-height: 60px; resize: vertical; }
+.toast { position: fixed; bottom: 24px; right: 24px; padding: 12px 20px; border-radius: 8px; color: #fff; font-size: 14px; font-weight: 500; z-index: 100; opacity: 0; transform: translateY(20px); transition: all .3s; }
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast.success { background: #00c896; }
+.toast.error { background: #ef4444; }
+.toast.info { background: #1877F2; }
+.hidden { display: none !important; }
+.raw-json { width: 100%; min-height: 400px; font-family: 'JetBrains Mono', 'SF Mono', monospace; font-size: 13px; padding: 16px; border: 1px solid #e2e8f0; border-radius: 8px; resize: vertical; }
+.saving-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 200; display: flex; align-items: center; justify-content: center; }
+.saving-box { background: #fff; padding: 32px; border-radius: 12px; text-align: center; }
+.spinner { width: 32px; height: 32px; border: 3px solid #e2e8f0; border-top-color: #1877F2; border-radius: 50%; animation: spin .6s linear infinite; margin: 0 auto 12px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (max-width: 640px) { .container { padding: 16px; } .topbar { flex-wrap: wrap; gap: 8px; } }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div>
+    <h1>Myelektra Content Editor</h1>
+    <div class="status" id="status">Loading...</div>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <button class="btn btn-outline" onclick="downloadJSON()">⬇ Download JSON</button>
+    <button class="btn btn-outline" onclick="document.getElementById('upload-input').click()">⬆ Upload JSON</button>
+    <input type="file" id="upload-input" accept=".json" class="hidden" onchange="uploadJSON(event)">
+    <button class="btn btn-success" onclick="saveToGitHub()">💾 Save to GitHub</button>
+  </div>
+</div>
+
+<div class="container">
+  <div class="actions">
+    <button class="btn btn-outline" onclick="switchView('form')" id="tab-form">📝 Form</button>
+    <button class="btn btn-outline" onclick="switchView('raw')" id="tab-raw">📄 Raw JSON</button>
+  </div>
+  <div id="form-view"></div>
+  <div id="raw-view" class="hidden">
+    <textarea class="raw-json" id="raw-json-text"></textarea>
+    <div style="margin-top:8px;display:flex;gap:8px">
+      <button class="btn btn-primary" onclick="rawToForm()">Apply to Form</button>
+      <button class="btn btn-success" onclick="saveFromRaw()">Save Raw to GitHub</button>
+    </div>
+  </div>
+</div>
+
+<div id="saving-overlay" class="saving-overlay hidden">
+  <div class="saving-box">
+    <div class="spinner"></div>
+    <p>Saving to GitHub...</p>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+// ─── State ───
+let config = null;
+let flatData = {};
+
+// ─── Init ───
+async function init() {
+  setStatus('Loading content...');
+  try {
+    const res = await fetch('https://cdn.jsdelivr.net/gh/client-coder/glm-weebly-theme@master/weebly-theme/content-config.json');
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    config = await res.json();
+    flatData = flatten(config);
+    renderForm();
+    document.getElementById('raw-json-text').value = JSON.stringify(config, null, 2);
+    setStatus('Loaded — ' + Object.keys(flatData).length + ' editable fields');
+  } catch (e) {
+    setStatus('Error loading: ' + e.message);
+    toast('Failed to load content-config.json from CDN', 'error');
+  }
+}
+
+// ─── Flatten JSON → { 'path.to.key': value } ───
+function flatten(obj, prefix, result) {
+  result = result || {};
+  prefix = prefix || '';
+  for (const key in obj) {
+    const path = prefix ? prefix + '.' + key : key;
+    const val = obj[key];
+    if (typeof val === 'string') {
+      result[path] = val;
+    } else if (Array.isArray(val)) {
+      result[path] = JSON.stringify(val);
+    } else if (typeof val === 'object' && val !== null) {
+      flatten(val, path, result);
+    } else {
+      result[path] = String(val);
+    }
+  }
+  return result;
+}
+
+// ─── Unflatten ───
+function unflatten(data) {
+  const result = {};
+  for (const path in data) {
+    const parts = path.split('.');
+    let cur = result;
+    for (let i = 0; i < parts.length; i++) {
+      if (i === parts.length - 1) {
+        const val = data[path];
+        try { cur[parts[i]] = JSON.parse(val); } catch(e) { cur[parts[i]] = val; }
+      } else {
+        if (!cur[parts[i]]) cur[parts[i]] = {};
+        cur = cur[parts[i]];
+      }
+    }
+  }
+  return result;
+}
+
+// ─── Render form from flat data ───
+function renderForm() {
+  const groups = {};
+  for (const path in flatData) {
+    const parts = path.split('.');
+    const group = parts.length > 1 ? parts.slice(0, -1).join('.') : 'general';
+    if (!groups[group]) groups[group] = {};
+    groups[group][path] = flatData[path];
+  }
+
+  const container = document.getElementById('form-view');
+  container.innerHTML = '';
+
+  for (const group in groups) {
+    const section = document.createElement('div');
+    section.className = 'section-group';
+
+    const header = document.createElement('div');
+    header.className = 'section-header';
+    header.innerHTML = `<span>${group}</span><span class="arrow">▼</span>`;
+    header.onclick = function() {
+      const body = this.nextElementSibling;
+      body.classList.toggle('hidden');
+      this.classList.toggle('collapsed');
+    };
+
+    const body = document.createElement('div');
+    body.className = 'section-body';
+
+    for (const path in groups[group]) {
+      const val = groups[group][path];
+      const f = document.createElement('div');
+      f.className = 'field';
+      const label = document.createElement('label');
+      label.textContent = path;
+      const isLong = typeof val === 'string' && val.length > 80;
+      const input = document.createElement(isLong ? 'textarea' : 'input');
+      if (!isLong) input.type = 'text';
+      input.value = val;
+      input.dataset.path = path;
+      input.oninput = function() { flatData[this.dataset.path] = this.value; };
+      f.appendChild(label);
+      f.appendChild(input);
+      body.appendChild(f);
+    }
+
+    section.appendChild(header);
+    section.appendChild(body);
+    container.appendChild(section);
+  }
+}
+
+// ─── View switching ───
+function switchView(view) {
+  document.getElementById('form-view').classList.toggle('hidden', view !== 'form');
+  document.getElementById('raw-view').classList.toggle('hidden', view !== 'raw');
+  document.getElementById('tab-form').classList.toggle('btn-primary', view === 'form');
+  document.getElementById('tab-form').classList.toggle('btn-outline', view !== 'form');
+  document.getElementById('tab-raw').classList.toggle('btn-primary', view === 'raw');
+  document.getElementById('tab-raw').classList.toggle('btn-outline', view !== 'raw');
+  if (view === 'raw') {
+    document.getElementById('raw-json-text').value = JSON.stringify(unflatten(flatData), null, 2);
+  }
+}
+
+function rawToForm() {
+  try {
+    const parsed = JSON.parse(document.getElementById('raw-json-text').value);
+    config = parsed;
+    flatData = flatten(parsed);
+    renderForm();
+    toast('Raw JSON applied to form', 'success');
+    switchView('form');
+  } catch (e) {
+    toast('Invalid JSON: ' + e.message, 'error');
+  }
+}
+
+// ─── Download JSON ───
+function downloadJSON() {
+  const data = unflatten(flatData);
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'content-config.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('Downloaded!', 'success');
+}
+
+// ─── Upload JSON ───
+function uploadJSON(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      config = parsed;
+      flatData = flatten(parsed);
+      renderForm();
+      document.getElementById('raw-json-text').value = JSON.stringify(parsed, null, 2);
+      toast('Uploaded & applied!', 'success');
+    } catch (err) {
+      toast('Invalid JSON: ' + err.message, 'error');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+// ─── Save to GitHub ───
+async function saveToGitHub() { await doSave(unflatten(flatData)); }
+async function saveFromRaw() {
+  try {
+    const parsed = JSON.parse(document.getElementById('raw-json-text').value);
+    await doSave(parsed);
+  } catch (e) {
+    toast('Invalid JSON: ' + e.message, 'error');
+  }
+}
+
+async function doSave(data) {
+  document.getElementById('saving-overlay').classList.remove('hidden');
+  try {
+    const res = await fetch('/api/save', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (!res.ok) {
+      const err = await res.text();
+      throw new Error(err);
+    }
+    const result = await res.json();
+    toast('Saved! Commit: ' + (result.commit ? result.commit.slice(0,7) : 'done'), 'success');
+    setStatus('Last saved: ' + new Date().toLocaleTimeString());
+  } catch (e) {
+    toast('Save failed: ' + e.message, 'error');
+  } finally {
+    document.getElementById('saving-overlay').classList.add('hidden');
+  }
+}
+
+// ─── Utils ───
+function setStatus(msg) { document.getElementById('status').textContent = msg; }
+
+function toast(msg, type) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast ' + (type || 'info') + ' show';
+  setTimeout(() => el.classList.remove('show'), 3500);
+}
+
+// ─── Start ───
+init();
+</script>
+</body>
+</html>
