@@ -1,11 +1,12 @@
 import { Link } from 'react-router-dom';
 import { AnimateOnScroll } from '../components/ScrollAnimations';
 import { ArrowRightIcon, BrainIcon, HubSpotIcon, QualityIcon, ReportIcon, GlobeIcon, RevenueIcon, LinkedInIcon, InstagramIcon } from '../components/Icons';
-import { whyMyelektra } from '../data/content';
+import { whyMyelektra, aboutPageConfig } from '../data/content';
 
 const whyIcons = [BrainIcon, HubSpotIcon, QualityIcon, ReportIcon, GlobeIcon, RevenueIcon];
 
 const About: React.FC = () => {
+  const c = aboutPageConfig;
   return (
     <div>
       {/* Hero */}
@@ -15,12 +16,12 @@ const About: React.FC = () => {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimateOnScroll>
             <h1 className="text-4xl lg:text-5xl font-bold text-text-primary mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
-              About Myelektra
+              {c.hero.headline}
             </h1>
           </AnimateOnScroll>
           <AnimateOnScroll stagger={1}>
             <p className="text-text-secondary text-lg max-w-2xl">
-              We are an AI-powered revenue growth partner helping B2B companies move from scattered prospecting to structured, measurable revenue systems.
+              {c.hero.subtitle}
             </p>
           </AnimateOnScroll>
         </div>
@@ -32,46 +33,31 @@ const About: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             <div>
               <AnimateOnScroll>
-                <span className="text-teal font-semibold text-sm uppercase tracking-wider">Our Story</span>
+                <span className="text-teal font-semibold text-sm uppercase tracking-wider">{c.story.label}</span>
                 <h2 className="text-3xl lg:text-4xl font-bold text-text-primary mt-2 mb-6" style={{ fontFamily: 'var(--font-heading)' }}>
-                  Built for Companies That Need More Than Contact Data
+                  {c.story.headline}
                 </h2>
               </AnimateOnScroll>
               <AnimateOnScroll stagger={1}>
-                <p className="text-text-secondary leading-relaxed mb-4">
-                  Myelektra was founded with a clear observation: most B2B companies struggle not because they lack data, but because they lack a system. They have spreadsheets of contacts but no structured process to identify the right buyers, engage them professionally, qualify their interest, and turn conversations into revenue.
-                </p>
+                <p className="text-text-secondary leading-relaxed mb-4">{c.story.paragraph1}</p>
               </AnimateOnScroll>
               <AnimateOnScroll stagger={2}>
-                <p className="text-text-secondary leading-relaxed mb-4">
-                  Based in Jakarta, Indonesia, we serve B2B companies across Southeast Asia, Australia, and selected global markets. Our approach combines AI-assisted research and prospecting with human SDR engagement, all organized around HubSpot CRM — so every activity, conversation, and opportunity is tracked and measurable.
-                </p>
+                <p className="text-text-secondary leading-relaxed mb-4">{c.story.paragraph2}</p>
               </AnimateOnScroll>
               <AnimateOnScroll stagger={3}>
-                <p className="text-text-secondary leading-relaxed">
-                  We do not sell databases. We build revenue systems — from ideal customer profiles and buyer personas to qualified meetings and pipeline visibility. Every service we offer is designed to move your business closer to predictable, sustainable revenue growth.
-                </p>
+                <p className="text-text-secondary leading-relaxed">{c.story.paragraph3}</p>
               </AnimateOnScroll>
             </div>
             <div>
               <AnimateOnScroll stagger={2}>
                 <div className="bg-bg-light rounded-2xl p-8 space-y-6">
-                  <div>
-                    <p className="text-teal font-bold text-3xl mb-1" style={{ fontFamily: 'var(--font-mono)' }}>7+</p>
-                    <p className="text-text-secondary text-sm">Target countries across Asia-Pacific and beyond</p>
-                  </div>
-                  <div className="border-t border-border pt-6">
-                    <p className="text-teal font-bold text-3xl mb-1" style={{ fontFamily: 'var(--font-mono)' }}>5</p>
-                    <p className="text-text-secondary text-sm">Integrated revenue growth solutions</p>
-                  </div>
-                  <div className="border-t border-border pt-6">
-                    <p className="text-teal font-bold text-3xl mb-1" style={{ fontFamily: 'var(--font-mono)' }}>8</p>
-                    <p className="text-text-secondary text-sm">Step revenue growth process from discovery to pipeline</p>
-                  </div>
-                  <div className="border-t border-border pt-6">
-                    <p className="text-teal font-bold text-3xl mb-1" style={{ fontFamily: 'var(--font-mono)' }}>1</p>
-                    <p className="text-text-secondary text-sm">HubSpot-centered execution system</p>
-                  </div>
+                  {c.stats.map((stat: { value: string; label: string }, i: number) => (
+                    <div key={stat.label}>
+                      {i > 0 && <div className="border-t border-border pt-6" />}
+                      <p className="text-teal font-bold text-3xl mb-1" style={{ fontFamily: 'var(--font-mono)' }}>{stat.value}</p>
+                      <p className="text-text-secondary text-sm">{stat.label}</p>
+                    </div>
+                  ))}
                 </div>
               </AnimateOnScroll>
             </div>
@@ -155,14 +141,14 @@ const About: React.FC = () => {
       <section className="bg-navy-dark py-20 lg:py-28">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <AnimateOnScroll>
-            <span className="text-teal font-semibold text-sm uppercase tracking-wider">Our Mission</span>
+            <span className="text-teal font-semibold text-sm uppercase tracking-wider">{c.mission.label}</span>
             <h2 className="text-3xl lg:text-4xl font-bold text-white mt-2 mb-6" style={{ fontFamily: 'var(--font-heading)' }}>
-              From Buyer Persona to Revenue Pipeline
+              {c.mission.headline}
             </h2>
           </AnimateOnScroll>
           <AnimateOnScroll stagger={1}>
             <p className="text-text-dark/60 max-w-2xl mx-auto leading-relaxed">
-              We exist to help B2B companies stop guessing and start building. With the right market intelligence, structured prospecting, professional engagement, disciplined CRM practices, and clear pipeline visibility, revenue growth becomes a system — not a hope.
+              {c.mission.body}
             </p>
           </AnimateOnScroll>
         </div>
@@ -173,16 +159,16 @@ const About: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <AnimateOnScroll>
             <h2 className="text-2xl lg:text-3xl font-bold text-text-primary mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
-              Let's Build Your Revenue System
+              {c.cta.headline}
             </h2>
             <p className="text-text-secondary mb-8 max-w-xl mx-auto">
-              Start with a discovery session to explore how Myelektra can support your revenue growth.
+              {c.cta.body}
             </p>
             <Link
-              to="/consultation"
+              to={c.cta.buttonPath}
               className="inline-flex items-center px-8 py-4 bg-teal text-white font-bold text-lg rounded-lg hover:bg-teal-hover transition-colors btn-transition shadow-lg shadow-teal/25"
             >
-              Book a Revenue Consultation
+              {c.cta.buttonLabel}
               <ArrowRightIcon size={20} className="ml-2" />
             </Link>
           </AnimateOnScroll>

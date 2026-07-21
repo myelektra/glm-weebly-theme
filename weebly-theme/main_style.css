@@ -630,8 +630,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .experience-section { background: var(--bg-light); padding: 48px 0 56px; }
 .marquee-track { display: flex; width: max-content; }
 .marquee-track:hover { animation-play-state: paused; }
-.marquee-logo { flex-shrink: 0; height: 36px; width: auto; filter: grayscale(100%) opacity(0.45); transition: filter 0.3s; margin: 0 28px; object-fit: contain; }
-.marquee-logo:hover { filter: grayscale(0%) opacity(1); }
+.marquee-logo { flex-shrink: 0; height: 36px; width: auto; opacity: 0.7; transition: opacity 0.3s; margin: 0 28px; object-fit: contain; }
+.marquee-logo:hover { opacity: 1; }
 @keyframes marquee { 0% { transform: translateX(1px); } 100% { transform: translateX(-50%); } }
 
 /* ============================================

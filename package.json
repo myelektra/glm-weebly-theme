@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "node scripts/sync-logo.mjs && vite build",
     "sync-logo": "node scripts/sync-logo.mjs",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build-theme": "node scripts/build-weebly.mjs"
   },
   "dependencies": {
     "clsx": "2.1.1",

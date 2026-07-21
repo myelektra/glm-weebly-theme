@@ -1,0 +1,75 @@
+name: Build Weebly Theme
+
+on:
+  push:
+    paths:
+      - 'content-config.json'
+      - 'weebly-theme/**'
+      - 'scripts/build-weebly.mjs'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build-weebly:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Weebly theme
+        run: npm run build-theme
+
+      - name: Verify build output
+        run: |
+          echo "=== index.html hero section ==="
+          sed -n '90,130p' weebly-theme/index.html
+          echo ""
+          echo "=== File count ==="
+          ls -la weebly-theme/*.html | wc -l
+
+      - name: Upload Weebly theme artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: weebly-theme-build
+          path: |
+            weebly-theme/*.html
+            weebly-theme/main_style.css
+            weebly-theme/manifest.json
+            weebly-theme/logo-myelektra.png
+          retention-days: 7
+
+  deploy-pages:
+    needs: build-weebly
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Weebly theme artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: weebly-theme-build
+          path: weebly-theme
+
+      - name: Create zip for Weebly upload
+        run: |
+          cd weebly-theme
+          zip -r ../weebly-theme-upload.zip *.html main_style.css manifest.json logo-myelektra.png
+
+      - name: Upload zip as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: weebly-theme-zip
+          path: weebly-theme-upload.zip
+          retention-days: 30

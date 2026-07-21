@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom';
 import { AnimateOnScroll } from '../components/ScrollAnimations';
 import { ArrowRightIcon, CheckIcon, solutionIconMap } from '../components/Icons';
-import { solutions } from '../data/content';
+import { solutions, solutionsPageConfig } from '../data/content';
 import PriceDisplay from '../components/PriceDisplay';
 
 const Solutions: React.FC = () => {
+  const c = solutionsPageConfig;
   return (
     <div>
       {/* Hero */}
@@ -12,12 +13,12 @@ const Solutions: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimateOnScroll>
             <h1 className="text-4xl lg:text-5xl font-bold text-text-primary mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
-              Revenue Growth Solutions
+              {c.hero.headline}
             </h1>
           </AnimateOnScroll>
           <AnimateOnScroll stagger={1}>
             <p className="text-text-secondary text-lg max-w-2xl">
-              From market intelligence to pipeline management — choose the solution that matches your growth stage.
+              {c.hero.subtitle}
             </p>
           </AnimateOnScroll>
         </div>
@@ -42,15 +43,15 @@ const Solutions: React.FC = () => {
                             <h2 className="font-bold text-text-primary text-2xl" style={{ fontFamily: 'var(--font-heading)' }}>
                               {sol.name}
                             </h2>
-                            {i === 2 && (
-                              <span className="text-gold text-xs font-bold uppercase tracking-wider">Most Popular</span>
+                            {sol.isPopular && (
+                              <span className="text-gold text-xs font-bold uppercase tracking-wider">{c.popularBadge}</span>
                             )}
                           </div>
                         </div>
                         <PriceDisplay price={sol.price} className="text-teal font-semibold text-sm mb-2" style={{ fontFamily: 'var(--font-mono)' }} />
                         <p className="text-text-secondary mb-6">{sol.description}</p>
 
-                        <h4 className="font-semibold text-text-primary text-sm uppercase tracking-wider mb-3">Included:</h4>
+                        <h4 className="font-semibold text-text-primary text-sm uppercase tracking-wider mb-3">{c.includedLabel}</h4>
                         <ul className="space-y-2 mb-6">
                           {sol.features.map((f) => (
                             <li key={f} className="flex items-start gap-2 text-text-secondary">
@@ -98,14 +99,14 @@ const Solutions: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <AnimateOnScroll>
             <h2 className="text-2xl lg:text-3xl font-bold text-text-primary mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
-              Not sure which solution fits?
+              {c.cta.headline}
             </h2>
-            <p className="text-text-secondary mb-6">Book a Revenue Consultation and we will help you find the right starting point.</p>
+            <p className="text-text-secondary mb-6">{c.cta.body}</p>
             <Link
-              to="/consultation"
+              to={c.cta.buttonPath}
               className="inline-flex items-center px-7 py-3.5 bg-teal text-white font-semibold rounded-lg hover:bg-teal-hover transition-colors btn-transition"
             >
-              Book a Revenue Consultation
+              {c.cta.buttonLabel}
               <ArrowRightIcon size={18} className="ml-2" />
             </Link>
           </AnimateOnScroll>

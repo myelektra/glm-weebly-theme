@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom';
 import { AnimateOnScroll } from '../components/ScrollAnimations';
 import { ArrowRightIcon, CheckIcon, solutionIconMap } from '../components/Icons';
-import { solutions, disclaimer } from '../data/content';
+import { solutions, disclaimer, pricingPageConfig } from '../data/content';
 import PriceDisplay from '../components/PriceDisplay';
 
 const Pricing: React.FC = () => {
+  const c = pricingPageConfig;
   return (
     <div>
       {/* Hero */}
@@ -12,12 +13,12 @@ const Pricing: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimateOnScroll>
             <h1 className="text-4xl lg:text-5xl font-bold text-text-primary mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
-              Transparent Pricing for Revenue Growth
+              {c.hero.headline}
             </h1>
           </AnimateOnScroll>
           <AnimateOnScroll stagger={1}>
             <p className="text-text-secondary text-lg max-w-2xl">
-              Clear, straightforward pricing with no hidden fees. Choose the solution that matches your growth stage and budget.
+              {c.hero.subtitle}
             </p>
           </AnimateOnScroll>
         </div>
@@ -29,7 +30,7 @@ const Pricing: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {solutions.map((sol, i) => {
               const IconComponent = solutionIconMap[sol.icon];
-              const isPopular = i === 2;
+              const isPopular = sol.isPopular;
               return (
                 <AnimateOnScroll key={sol.id} stagger={i + 1} className="h-full">
                   <div className={`bg-white rounded-2xl p-8 border h-full flex flex-col card-hover ${
@@ -39,7 +40,7 @@ const Pricing: React.FC = () => {
                   }`}>
                     {isPopular && (
                       <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-gold text-navy-dark text-xs font-bold rounded-full uppercase tracking-wider">
-                        Most Popular
+                        {c.popularBadge}
                       </span>
                     )}
                     <div className="flex items-center gap-3 mb-4">
@@ -86,7 +87,7 @@ const Pricing: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimateOnScroll>
             <h2 className="text-2xl lg:text-3xl font-bold text-text-primary text-center mb-12" style={{ fontFamily: 'var(--font-heading)' }}>
-              Solution Comparison
+              {c.comparisonHeadline}
             </h2>
           </AnimateOnScroll>
 
@@ -187,16 +188,16 @@ const Pricing: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <AnimateOnScroll>
             <h2 className="text-2xl lg:text-3xl font-bold text-white mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
-              Need Help Choosing the Right Solution?
+              {c.cta.headline}
             </h2>
             <p className="text-text-dark/60 mb-8 max-w-xl mx-auto">
-              Book a Revenue Consultation and we will help you determine the best starting point for your growth goals.
+              {c.cta.body}
             </p>
             <Link
-              to="/consultation"
+              to={c.cta.buttonPath}
               className="inline-flex items-center px-8 py-4 bg-teal text-white font-bold text-lg rounded-lg hover:bg-teal-hover transition-colors btn-transition shadow-lg shadow-teal/25"
             >
-              Book a Revenue Consultation
+              {c.cta.buttonLabel}
               <ArrowRightIcon size={20} className="ml-2" />
             </Link>
           </AnimateOnScroll>

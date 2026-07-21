@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom';
 import { AnimateOnScroll } from '../components/ScrollAnimations';
 import { ArrowRightIcon } from '../components/Icons';
-import { processSteps } from '../data/content';
+import { processSteps, howItWorksConfig } from '../data/content';
 
 const HowItWorks: React.FC = () => {
+  const c = howItWorksConfig;
   return (
     <div>
       {/* Hero */}
@@ -13,12 +14,12 @@ const HowItWorks: React.FC = () => {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimateOnScroll>
             <h1 className="text-4xl lg:text-5xl font-bold text-text-primary mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
-              How Myelektra Works
+              {c.hero.headline}
             </h1>
           </AnimateOnScroll>
           <AnimateOnScroll stagger={1}>
             <p className="text-text-secondary text-lg max-w-2xl">
-              A structured, eight-step process that takes you from discovery to a measurable and continuously improving revenue pipeline.
+              {c.hero.subtitle}
             </p>
           </AnimateOnScroll>
         </div>
@@ -50,7 +51,7 @@ const HowItWorks: React.FC = () => {
                     </h2>
                     <p className="text-text-secondary leading-relaxed mb-4">{step.description}</p>
                     <div className="inline-flex items-center gap-2 px-4 py-2 bg-teal/5 border border-teal/20 rounded-lg">
-                      <span className="text-teal text-xs font-bold uppercase tracking-wider">Output</span>
+                      <span className="text-teal text-xs font-bold uppercase tracking-wider">{c.outputLabel}</span>
                       <span className="w-px h-4 bg-teal/30" />
                       <span className="text-text-primary text-sm font-medium">{step.output}</span>
                     </div>
@@ -67,7 +68,7 @@ const HowItWorks: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimateOnScroll>
             <h2 className="text-2xl lg:text-3xl font-bold text-text-primary text-center mb-12" style={{ fontFamily: 'var(--font-heading)' }}>
-              The Complete Revenue Growth Flow
+              {c.summaryHeadline}
             </h2>
           </AnimateOnScroll>
           <AnimateOnScroll stagger={1}>
@@ -95,16 +96,16 @@ const HowItWorks: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <AnimateOnScroll>
             <h2 className="text-2xl lg:text-3xl font-bold text-white mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
-              Ready to Start Your Revenue Growth Journey?
+              {c.cta.headline}
             </h2>
             <p className="text-text-dark/60 mb-8 max-w-xl mx-auto">
-              Begin with a discovery session and let us build a revenue system tailored to your business.
+              {c.cta.body}
             </p>
             <Link
-              to="/consultation"
+              to={c.cta.buttonPath}
               className="inline-flex items-center px-8 py-4 bg-teal text-white font-bold text-lg rounded-lg hover:bg-teal-hover transition-colors btn-transition shadow-lg shadow-teal/25"
             >
-              Book a Revenue Consultation
+              {c.cta.buttonLabel}
               <ArrowRightIcon size={20} className="ml-2" />
             </Link>
           </AnimateOnScroll>

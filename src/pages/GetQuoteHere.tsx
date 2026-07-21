@@ -2,11 +2,13 @@ import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { AnimateOnScroll } from '../components/ScrollAnimations';
 import { ArrowRightIcon } from '../components/Icons';
+import { getQuotePageConfig } from '../data/content';
 
-const HS_FORM_PORTAL = '3306812';
-const HS_FORM_ID = 'a5276c78-f3c3-4eb1-9434-7d359384f6b0';
+const HS_FORM_PORTAL = import.meta.env.VITE_HS_PORTAL || getQuotePageConfig.hubspot.portalId;
+const HS_FORM_ID = import.meta.env.VITE_HS_FORM_ID || getQuotePageConfig.hubspot.formId;
 
 const GetQuoteHere: React.FC = () => {
+  const c = getQuotePageConfig;
   const formRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -54,12 +56,12 @@ const GetQuoteHere: React.FC = () => {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimateOnScroll>
             <h1 className="text-4xl lg:text-5xl font-bold text-text-primary mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
-              Get a Quote
+              {c.hero.headline}
             </h1>
           </AnimateOnScroll>
           <AnimateOnScroll stagger={1}>
             <p className="text-text-secondary text-lg max-w-2xl">
-              Tell us about your revenue growth needs and we'll provide a tailored quote.
+              {c.hero.subtitle}
             </p>
           </AnimateOnScroll>
         </div>
@@ -72,10 +74,10 @@ const GetQuoteHere: React.FC = () => {
             <div className="lg:col-span-2">
               <AnimateOnScroll>
                 <h2 className="text-2xl font-bold text-text-primary mb-2" style={{ fontFamily: 'var(--font-heading)' }}>
-                  Request a Custom Quote
+                  {c.formHeadline}
                 </h2>
                 <p className="text-text-secondary mb-8">
-                  Fill out the form below and our team will get back to you within 1-2 business days.
+                  {c.formSubtitle}
                 </p>
               </AnimateOnScroll>
               <AnimateOnScroll stagger={1}>
@@ -91,13 +93,12 @@ const GetQuoteHere: React.FC = () => {
                 <AnimateOnScroll stagger={2}>
                   <div className="bg-bg-light rounded-2xl p-6">
                     <h3 className="font-bold text-text-primary text-lg mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
-                      What You'll Get
+                      {c.sidebar.headline}
                     </h3>
                     <ul className="space-y-3 text-sm text-text-secondary">
-                      <li className="flex items-start gap-2">✓ Custom pricing based on your needs</li>
-                      <li className="flex items-start gap-2">✓ Detailed scope of work</li>
-                      <li className="flex items-start gap-2">✓ Timeline and deliverables</li>
-                      <li className="flex items-start gap-2">✓ No-obligation discussion</li>
+                      {c.sidebar.items.map((item: string) => (
+                        <li key={item} className="flex items-start gap-2">✓ {item}</li>
+                      ))}
                     </ul>
                   </div>
                 </AnimateOnScroll>
@@ -112,16 +113,16 @@ const GetQuoteHere: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <AnimateOnScroll>
             <h2 className="text-2xl lg:text-3xl font-bold text-white mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
-              Ready to Grow Your Revenue?
+              {c.cta.headline}
             </h2>
             <p className="text-text-dark/60 mb-8 max-w-xl mx-auto">
-              Start with a discovery session and let us build a revenue system tailored to your business.
+              {c.cta.body}
             </p>
             <Link
-              to="/consultation"
+              to={c.cta.buttonPath}
               className="inline-flex items-center px-8 py-4 bg-teal text-white font-bold text-lg rounded-lg hover:bg-teal-hover transition-colors btn-transition shadow-lg shadow-teal/25"
             >
-              Book a Revenue Consultation
+              {c.cta.buttonLabel}
               <ArrowRightIcon size={20} className="ml-2" />
             </Link>
           </AnimateOnScroll>

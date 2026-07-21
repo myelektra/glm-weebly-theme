@@ -4,6 +4,7 @@ import { Header } from './Header';
 import { Footer } from './Footer';
 import { ArrowUpIcon, CloseIcon } from './Icons';
 import { useScrollReveal } from './ScrollReveal';
+import { globalConfig } from '../data/content';
 
 export const Layout: React.FC = () => {
   const [showFloating, setShowFloating] = useState(false);
@@ -11,6 +12,7 @@ export const Layout: React.FC = () => {
   const [showCookie, setShowCookie] = useState(false);
   const [floatingDismissed, setFloatingDismissed] = useState(false);
   const location = useLocation();
+  const g = globalConfig;
 
   useScrollReveal();
 
@@ -21,12 +23,12 @@ export const Layout: React.FC = () => {
   useEffect(() => {
     const handleScroll = () => {
       const y = window.scrollY;
-      setShowFloating(y > 600 && !floatingDismissed);
-      setShowBackToTop(y > 500);
+      setShowFloating(y > (g.floatingCta.showAfterScrollPx || 600) && !floatingDismissed);
+      setShowBackToTop(y > (g.backToTop.showAfterScrollPx || 500));
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [floatingDismissed]);
+  }, [floatingDismissed, g.floatingCta.showAfterScrollPx, g.backToTop.showAfterScrollPx]);
 
   useEffect(() => {
     const dismissed = localStorage.getItem('cookie-dismissed');
@@ -57,11 +59,11 @@ export const Layout: React.FC = () => {
       <div className={`floating-cta${showFloating ? ' show' : ''}`}>
         <div className="floating-cta-inner">
           <p className="hide-mobile" style={{ color: 'var(--text-dark)', fontSize: 14 }}>
-            Ready to build your revenue system?
+            {g.floatingCta.text}
           </p>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginLeft: 'auto' }}>
-            <Link to="/consultation" className="btn btn-primary" style={{ padding: '10px 20px', fontSize: 14 }}>
-              Book a Revenue Consultation
+            <Link to={g.floatingCta.buttonPath} className="btn btn-primary" style={{ padding: '10px 20px', fontSize: 14 }}>
+              {g.floatingCta.buttonLabel}
             </Link>
             <button
               onClick={() => setFloatingDismissed(true)}
@@ -88,11 +90,11 @@ export const Layout: React.FC = () => {
         <div className="cookie-banner" style={{ display: 'block' }}>
           <div className="cookie-inner">
             <p className="cookie-text">
-              We use cookies to improve your experience. By continuing to use this site, you agree to our privacy policy.
+              {g.cookieBanner.text}
             </p>
             <div className="cookie-buttons">
-              <button onClick={dismissCookie} className="cookie-accept">Accept</button>
-              <button onClick={dismissCookie} className="cookie-learn">Learn More</button>
+              <button onClick={dismissCookie} className="cookie-accept">{g.cookieBanner.acceptLabel}</button>
+              <button onClick={dismissCookie} className="cookie-learn">{g.cookieBanner.learnMoreLabel}</button>
             </div>
           </div>
         </div>

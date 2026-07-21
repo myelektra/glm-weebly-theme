@@ -1,19 +1,20 @@
 import { useParams, Link } from 'react-router-dom';
 import { AnimateOnScroll } from '../components/ScrollAnimations';
 import { ArrowRightIcon, CheckIcon, ChevronRightIcon, solutionIconMap } from '../components/Icons';
-import { solutions } from '../data/content';
+import { solutions, solutionDetailPageConfig } from '../data/content';
 import PriceDisplay from '../components/PriceDisplay';
 
 const SolutionDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const solution = solutions.find(s => s.id === id);
+  const c = solutionDetailPageConfig;
 
   if (!solution) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-bg-light">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-text-primary mb-4">Solution Not Found</h1>
-          <Link to="/solutions" className="text-blue hover:underline">Back to Solutions</Link>
+          <h1 className="text-2xl font-bold text-text-primary mb-4">{c.notFoundMessage}</h1>
+          <Link to="/solutions" className="text-blue hover:underline">{c.notFoundBackLink}</Link>
         </div>
       </div>
     );
@@ -28,9 +29,9 @@ const SolutionDetail: React.FC = () => {
       <div className="bg-white pt-24 pb-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <nav className="flex items-center gap-2 text-sm text-text-secondary mb-6" aria-label="Breadcrumb">
-            <Link to="/" className="hover:text-text-primary transition-colors">Home</Link>
+            <Link to="/" className="hover:text-text-primary transition-colors">{c.breadcrumb.home}</Link>
             <ChevronRightIcon size={14} />
-            <Link to="/solutions" className="hover:text-text-primary transition-colors">Solutions</Link>
+            <Link to="/solutions" className="hover:text-text-primary transition-colors">{c.breadcrumb.solutions}</Link>
             <ChevronRightIcon size={14} />
             <span className="text-teal">{solution.name}</span>
           </nav>
@@ -79,7 +80,7 @@ const SolutionDetail: React.FC = () => {
             <div>
               <AnimateOnScroll>
                 <h2 className="text-2xl lg:text-3xl font-bold text-text-primary mb-6" style={{ fontFamily: 'var(--font-heading)' }}>
-                  What's Included
+                  {c.includedHeadline}
                 </h2>
               </AnimateOnScroll>
               <ul className="space-y-4">
@@ -100,7 +101,7 @@ const SolutionDetail: React.FC = () => {
               <AnimateOnScroll>
                 <div className="bg-bg-light rounded-2xl p-8">
                   <h3 className="font-bold text-text-primary text-lg mb-3" style={{ fontFamily: 'var(--font-heading)' }}>
-                    Best For
+                    {c.bestForHeadline}
                   </h3>
                   <p className="text-text-secondary leading-relaxed">{solution.bestFor}</p>
                 </div>
@@ -116,7 +117,7 @@ const SolutionDetail: React.FC = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <AnimateOnScroll>
               <h2 className="text-2xl lg:text-3xl font-bold text-text-primary text-center mb-12" style={{ fontFamily: 'var(--font-heading)' }}>
-                How It Works
+                {c.howItWorksHeadline}
               </h2>
             </AnimateOnScroll>
 
@@ -142,10 +143,10 @@ const SolutionDetail: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <AnimateOnScroll>
             <h2 className="text-2xl lg:text-3xl font-bold text-white mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
-              Ready to Get Started with {solution.name}?
+              {c.ctaPrefix} {solution.name}{c.ctaSuffix}
             </h2>
             <p className="text-text-dark/60 mb-8 max-w-xl mx-auto">
-              Book a discovery session to discuss your requirements, timeline, and expected outcomes.
+              {c.ctaBody}
             </p>
             <Link
               to="/consultation"
@@ -163,7 +164,7 @@ const SolutionDetail: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimateOnScroll>
             <h2 className="text-2xl lg:text-3xl font-bold text-text-primary mb-8" style={{ fontFamily: 'var(--font-heading)' }}>
-              Related Solutions
+              {c.relatedSolutionsHeadline}
             </h2>
           </AnimateOnScroll>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

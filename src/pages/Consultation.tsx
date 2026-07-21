@@ -2,9 +2,10 @@ import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { AnimateOnScroll } from '../components/ScrollAnimations';
 import { ShieldIcon, ClockIcon, solutionIconMap } from '../components/Icons';
-import { solutions } from '../data/content';
+import { solutions, consultationPageConfig } from '../data/content';
 
 const Consultation: React.FC = () => {
+  const c = consultationPageConfig;
   useEffect(() => {
     if (!document.querySelector('script[src*="MeetingsEmbedCode.js"]')) {
       const script = document.createElement('script');
@@ -24,12 +25,12 @@ const Consultation: React.FC = () => {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimateOnScroll>
             <h1 className="text-4xl lg:text-5xl font-bold text-text-primary mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
-              Book a Revenue Consultation
+              {c.hero.headline}
             </h1>
           </AnimateOnScroll>
           <AnimateOnScroll stagger={1}>
             <p className="text-text-secondary text-lg max-w-2xl">
-              Start with a discovery session to review your target market, current sales process, HubSpot requirements, and growth priorities.
+              {c.hero.subtitle}
             </p>
           </AnimateOnScroll>
         </div>
@@ -43,16 +44,16 @@ const Consultation: React.FC = () => {
             <div className="lg:col-span-2">
               <AnimateOnScroll>
                 <h2 className="text-2xl font-bold text-text-primary mb-2" style={{ fontFamily: 'var(--font-heading)' }}>
-                  Schedule Your Discovery Session
+                  {c.scheduleHeadline}
                 </h2>
                 <p className="text-text-secondary mb-8">
-                  Pick a time that works for you below.
+                  {c.scheduleSubtitle}
                 </p>
               </AnimateOnScroll>
               <AnimateOnScroll stagger={1}>
                 <div
                   className="meetings-iframe-container"
-                  data-src="https://app.hubspot.com/meetings/admin110/online-meeting-with-myelektra-?embed=true"
+                  data-src={c.hubspot.meetingsUrl}
                 />
               </AnimateOnScroll>
             </div>
@@ -63,27 +64,20 @@ const Consultation: React.FC = () => {
                 <AnimateOnScroll stagger={1}>
                   <div className="bg-bg-light rounded-2xl p-6">
                     <h3 className="font-bold text-text-primary text-lg mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
-                      What to Expect
+                      {c.sidebarWhatToExpect.headline}
                     </h3>
                     <div className="space-y-4">
-                      <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 bg-teal/10 rounded-lg flex items-center justify-center shrink-0">
-                          <ClockIcon size={20} className="text-teal" />
+                      {c.sidebarWhatToExpect.items.map((item: { icon: string; title: string; description: string }) => (
+                        <div key={item.title} className="flex items-start gap-3">
+                          <div className="w-10 h-10 bg-teal/10 rounded-lg flex items-center justify-center shrink-0">
+                            {item.icon === 'clock' ? <ClockIcon size={20} className="text-teal" /> : <ShieldIcon size={20} className="text-teal" />}
+                          </div>
+                          <div>
+                            <p className="font-medium text-text-primary text-sm">{item.title}</p>
+                            <p className="text-text-secondary text-xs">{item.description}</p>
+                          </div>
                         </div>
-                        <div>
-                          <p className="font-medium text-text-primary text-sm">30-Minute Session</p>
-                          <p className="text-text-secondary text-xs">Focused discovery conversation</p>
-                        </div>
-                      </div>
-                      <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 bg-teal/10 rounded-lg flex items-center justify-center shrink-0">
-                          <ShieldIcon size={20} className="text-teal" />
-                        </div>
-                        <div>
-                          <p className="font-medium text-text-primary text-sm">No Commitment</p>
-                          <p className="text-text-secondary text-xs">Zero obligation to proceed</p>
-                        </div>
-                      </div>
+                      ))}
                     </div>
                   </div>
                 </AnimateOnScroll>
@@ -91,7 +85,7 @@ const Consultation: React.FC = () => {
                 <AnimateOnScroll stagger={2}>
                   <div className="bg-bg-light rounded-2xl p-6">
                     <h3 className="font-bold text-text-primary text-lg mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
-                      Quick Links
+                      {c.sidebarQuickLinks.headline}
                     </h3>
                     <div className="space-y-3">
                       {solutions.map(s => {

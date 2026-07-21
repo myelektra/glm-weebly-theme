@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom';
 import { AnimateOnScroll } from '../components/ScrollAnimations';
 import { ArrowRightIcon, industryIconMap } from '../components/Icons';
-import { industries } from '../data/content';
+import { industries, industriesPageConfig } from '../data/content';
 
 const Industries: React.FC = () => {
+  const c = industriesPageConfig;
   return (
     <div>
       {/* Hero */}
@@ -11,12 +12,12 @@ const Industries: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimateOnScroll>
             <h1 className="text-4xl lg:text-5xl font-bold text-text-primary mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
-              Industries We Serve
+              {c.hero.headline}
             </h1>
           </AnimateOnScroll>
           <AnimateOnScroll stagger={1}>
             <p className="text-text-secondary text-lg max-w-2xl">
-              Myelektra provides targeted revenue growth solutions across key B2B industries, connecting you with the decision-makers who drive purchasing decisions.
+              {c.hero.subtitle}
             </p>
           </AnimateOnScroll>
         </div>
@@ -42,7 +43,7 @@ const Industries: React.FC = () => {
                     <p className="text-text-secondary text-lg leading-relaxed">{ind.description}</p>
                   </div>
                   <div className="bg-bg-light rounded-2xl p-8">
-                    <h3 className="font-semibold text-text-primary text-sm uppercase tracking-wider mb-4">Buyer Personas</h3>
+                    <h3 className="font-semibold text-text-primary text-sm uppercase tracking-wider mb-4">{c.personasHeadline}</h3>
                     <div className="space-y-3">
                       {ind.personas.map((p, pi) => (
                         <div key={p} className="flex items-center gap-3">
@@ -69,16 +70,16 @@ const Industries: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <AnimateOnScroll>
             <h2 className="text-2xl lg:text-3xl font-bold text-text-primary mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
-              Targeting a Specific Industry?
+              {c.cta.headline}
             </h2>
             <p className="text-text-secondary mb-6 max-w-xl mx-auto">
-              Book a Revenue Consultation to discuss your industry, target market, and how Myelektra can help you reach the right decision-makers.
+              {c.cta.body}
             </p>
             <Link
-              to="/consultation"
+              to={c.cta.buttonPath}
               className="inline-flex items-center px-7 py-3.5 bg-teal text-white font-semibold rounded-lg hover:bg-teal-hover transition-colors btn-transition"
             >
-              Book a Revenue Consultation
+              {c.cta.buttonLabel}
               <ArrowRightIcon size={18} className="ml-2" />
             </Link>
           </AnimateOnScroll>

@@ -267,3 +267,21 @@ export const whyIconMap: Record<string, React.FC<IconProps>> = {
   globe: GlobeIcon,
   revenue: RevenueIcon
 };
+
+// Icon mapper for journey cards (homepage section 2)
+export const journeyIconMap: Record<string, React.FC<IconProps>> = {
+  target: TargetIcon,
+  robot: RobotIcon,
+  headset: HeadsetIcon,
+  database: DatabaseIcon,
+  chart: ChartIcon
+};
+
+// Icon mapper for achievement items (homepage section 3)
+export const achievementIconMap: Record<string, React.FC<IconProps>> = {
+  bullseye: BullseyeIcon,
+  chat: ChatIcon,
+  funnel: FunnelIcon,
+  eye: EyeIcon,
+  layers: LayersIcon
+};

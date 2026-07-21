@@ -56,6 +56,18 @@
     "consultation": {
       "name": "Book Consultation",
       "file": "consultation.html"
+    },
+    "get-quote": {
+      "name": "Get Quote",
+      "file": "get-quote-here-new.html"
+    },
+    "contact": {
+      "name": "Contact Us",
+      "file": "contact-new.html"
+    },
+    "template": {
+      "name": "Template (Editor)",
+      "file": "template.html"
     }
   }
 }

@@ -1,28 +1,17 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { MenuIcon, CloseIcon, ChevronDownIcon, ChevronRightIcon } from './Icons';
-import { solutions } from '../data/content';
+import { solutions, navigationConfig } from '../data/content';
 
-const navLinks = [
-  { label: 'Home', path: '/' },
-  {
-    label: 'Solutions',
-    path: '/solutions',
-    submenu: solutions.map(s => ({ label: s.name, path: `/solutions/${s.id}` }))
-  },
-  { label: 'Industries', path: '/industries' },
-  { label: 'Pricing', path: '/pricing' },
-  { label: 'Academy', path: '/academy' },
-  { label: 'About', path: '/about' },
-  {
-    label: 'Contact Us',
-    path: '/contact',
-    submenu: [
-      { label: 'Get Quote Here', path: '/get-quote-here-new' },
-      { label: 'Book Online Meeting', path: '/consultation' },
-    ]
-  },
-];
+const navLinks = navigationConfig.desktop.map((link: any) => {
+  if (link.submenu && link.label === 'Solutions') {
+    return {
+      ...link,
+      submenu: solutions.map(s => ({ label: s.name, path: `/solutions/${s.id}` }))
+    };
+  }
+  return link;
+});
 
 export const Header: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -89,7 +78,7 @@ export const Header: React.FC = () => {
                 </Link>
                 {link.submenu && dropdownOpen && (
                   <div className="nav-dropdown-menu">
-                    {link.submenu.map((item) => (
+                    {link.submenu.map((item: any) => (
                       <Link key={item.path} to={item.path} className="dropdown-item">
                         {item.label}
                         <ChevronRightIcon size={14} />
@@ -101,7 +90,7 @@ export const Header: React.FC = () => {
             ))}
           </nav>
 
-          <Link to="/consultation" className="header-cta">Book a Revenue Consultation</Link>
+          <Link to={navigationConfig.headerCtaPath} className="header-cta">{navigationConfig.headerCta}</Link>
 
           <button
             className="hamburger"
@@ -152,7 +141,7 @@ export const Header: React.FC = () => {
             </div>
           ))}
           <div className="mobile-divider">
-            <Link to="/consultation" className="mobile-cta">Book a Revenue Consultation</Link>
+            <Link to={navigationConfig.headerCtaPath} className="mobile-cta">{navigationConfig.headerCta}</Link>
           </div>
         </nav>
       </div>

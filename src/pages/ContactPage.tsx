@@ -1,8 +1,11 @@
 import { Link } from 'react-router-dom';
 import { AnimateOnScroll } from '../components/ScrollAnimations';
 import { ArrowRightIcon } from '../components/Icons';
+import { contactPageConfig, brandConfig } from '../data/content';
 
 const ContactPage: React.FC = () => {
+  const c = contactPageConfig;
+  const b = brandConfig;
   return (
     <div>
       <section className="bg-white pt-32 pb-20 lg:pt-40 lg:pb-28 relative overflow-hidden">
@@ -11,12 +14,12 @@ const ContactPage: React.FC = () => {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimateOnScroll>
             <h1 className="text-4xl lg:text-5xl font-bold text-text-primary mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
-              Contact Us
+              {c.hero.headline}
             </h1>
           </AnimateOnScroll>
           <AnimateOnScroll stagger={1}>
             <p className="text-text-secondary text-lg max-w-2xl">
-              Get in touch with our team to discuss how Myelektra can help grow your revenue.
+              {c.hero.subtitle}
             </p>
           </AnimateOnScroll>
         </div>
@@ -28,34 +31,41 @@ const ContactPage: React.FC = () => {
             {/* Contact Info */}
             <div className="space-y-8">
               <AnimateOnScroll>
+                <div className="flex flex-wrap gap-4">
+                  {c.ctaButtons.map((btn: { label: string; path: string; variant: string }) => (
+                    <Link
+                      key={btn.path}
+                      to={btn.path}
+                      className={`inline-flex items-center px-6 py-3 font-semibold rounded-lg transition-colors btn-transition ${
+                        btn.variant === 'primary'
+                          ? 'bg-teal text-white hover:bg-teal-hover'
+                          : 'border border-teal text-teal hover:bg-teal/5'
+                      }`}
+                    >
+                      {btn.label} <ArrowRightIcon size={16} className="ml-2" />
+                    </Link>
+                  ))}
+                </div>
+              </AnimateOnScroll>
+              <AnimateOnScroll>
                 <div>
-                  <h3 className="font-bold text-text-primary text-lg mb-4" style={{ fontFamily: 'var(--font-heading)' }}>Corporate Office</h3>
-                  <p className="text-text-secondary">38th Floor, 88 Office</p>
-                  <p className="text-text-secondary">Kota Kasablanka, South Jakarta</p>
-                  <p className="text-text-secondary">Indonesia</p>
+                  <h3 className="font-bold text-text-primary text-lg mb-4" style={{ fontFamily: 'var(--font-heading)' }}>{c.officeHeadline}</h3>
+                  <p className="text-text-secondary">{b.address.line1}</p>
+                  <p className="text-text-secondary">{b.address.line2}</p>
+                  <p className="text-text-secondary">{b.address.country}</p>
                 </div>
               </AnimateOnScroll>
               <AnimateOnScroll stagger={1}>
                 <div>
-                  <h3 className="font-bold text-text-primary text-lg mb-4" style={{ fontFamily: 'var(--font-heading)' }}>Contact Info</h3>
-                  <p className="text-text-secondary font-medium">PT. Myelektra Solusi Indonesia</p>
-                  <a href="tel:+622129636761" className="text-teal hover:text-teal-hover transition-colors">+62 21 29636761</a>
+                  <h3 className="font-bold text-text-primary text-lg mb-4" style={{ fontFamily: 'var(--font-heading)' }}>{c.contactInfoHeadline}</h3>
+                  <p className="text-text-secondary font-medium">{b.company}</p>
+                  <a href={`tel:${b.phone}`} className="text-teal hover:text-teal-hover transition-colors">{b.phone}</a>
                 </div>
               </AnimateOnScroll>
               <AnimateOnScroll stagger={2}>
                 <div>
-                  <h3 className="font-bold text-text-primary text-lg mb-4" style={{ fontFamily: 'var(--font-heading)' }}>Hours</h3>
-                  <p className="text-text-secondary">Weekdays / 9:00 – 18:00</p>
-                </div>
-              </AnimateOnScroll>
-              <AnimateOnScroll stagger={3}>
-                <div className="flex flex-wrap gap-4">
-                  <Link to="/get-quote-here-new" className="inline-flex items-center px-6 py-3 bg-teal text-white font-semibold rounded-lg hover:bg-teal-hover transition-colors btn-transition">
-                    Get Quote Here <ArrowRightIcon size={16} className="ml-2" />
-                  </Link>
-                  <Link to="/consultation" className="inline-flex items-center px-6 py-3 border border-teal text-teal font-semibold rounded-lg hover:bg-teal/5 transition-colors">
-                    Book Online Meeting <ArrowRightIcon size={16} className="ml-2" />
-                  </Link>
+                  <h3 className="font-bold text-text-primary text-lg mb-4" style={{ fontFamily: 'var(--font-heading)' }}>{c.hoursHeadline}</h3>
+                  <p className="text-text-secondary">{b.hours}</p>
                 </div>
               </AnimateOnScroll>
             </div>
