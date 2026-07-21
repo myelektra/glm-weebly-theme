@@ -66,7 +66,7 @@
   // Fetch JSON from GitHub via jsDelivr CDN (CORS enabled)
   try {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'https://cdn.jsdelivr.net/gh/myelektra/glm-weebly-theme@master/weebly-theme/content-config.json', true);
+    xhr.open('GET', 'https://cdn.jsdelivr.net/gh/myelektra/glm-weebly-theme@master/weebly-theme/content-config.json?cb=' + Date.now(), true);
     xhr.onreadystatechange = function () {
       if (xhr.readyState === 4) {
         if (xhr.status === 200) {

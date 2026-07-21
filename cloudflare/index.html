@@ -313,6 +313,70 @@ body {
   .preview-panel { position: static; max-height: none; }
 }
 
+/* ─── Save Confirmation Modal ─── */
+.confirm-overlay {
+  position: fixed; inset: 0; background: rgba(15,27,45,0.65);
+  z-index: 160; display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(3px); padding: 20px;
+}
+.confirm-box {
+  background: #fff; border-radius: 14px; max-width: 640px; width: 100%;
+  max-height: 80vh; display: flex; flex-direction: column;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.25);
+  animation: confirm-in .25s ease-out;
+}
+@keyframes confirm-in {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.confirm-header {
+  padding: 20px 24px 16px; border-bottom: 1px solid #e2e8f0;
+  display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+}
+.confirm-header h3 { font-size: 16px; font-weight: 700; color: #0F1B2D; flex: 1; }
+.confirm-header .changes-count {
+  background: #FFB800; color: #1a1a2e; font-size: 11px; font-weight: 700;
+  padding: 2px 10px; border-radius: 12px;
+}
+.confirm-body {
+  padding: 16px 24px; overflow-y: auto; flex: 1;
+}
+.confirm-empty {
+  text-align: center; padding: 24px; color: #9CA3AF; font-size: 13px;
+}
+.confirm-change-group {
+  margin-bottom: 12px; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;
+}
+.confirm-change-group-header {
+  background: #fafbfc; padding: 8px 14px;
+  font-size: 12px; font-weight: 600; color: #374151;
+  border-bottom: 1px solid #e2e8f0;
+}
+.confirm-change-item {
+  padding: 8px 14px; border-bottom: 1px solid #f0f2f5;
+  font-size: 12px;
+}
+.confirm-change-item:last-child { border-bottom: none; }
+.confirm-change-label { font-weight: 600; color: #1A73E8; margin-bottom: 2px; }
+.confirm-change-compare {
+  display: grid; grid-template-columns: auto 1fr; gap: 2px 8px;
+  font-size: 11px; color: #6B7280;
+}
+.confirm-change-old { grid-column: 1; color: #ef4444; font-weight: 500; }
+.confirm-change-new { grid-column: 1; color: #00C896; font-weight: 500; }
+.confirm-change-val-old {
+  grid-column: 2; color: #9CA3AF; overflow: hidden; text-overflow: ellipsis;
+  white-space: nowrap; max-width: 400px;
+}
+.confirm-change-val-new {
+  grid-column: 2; color: #1a1a2e; overflow: hidden; text-overflow: ellipsis;
+  white-space: nowrap; max-width: 400px; font-weight: 500;
+}
+.confirm-footer {
+  padding: 14px 24px 20px; border-top: 1px solid #e2e8f0;
+  display: flex; justify-content: flex-end; gap: 8px; flex-shrink: 0;
+}
+
 /* ─── Back to top (editor scroll) ─── */
 .editor-scroll-top {
   position: fixed; bottom: 70px; right: 20px;
@@ -429,6 +493,24 @@ body {
     <small>Committing content-config.json to the repository</small>
   </div>
 </div>
+
+<!-- ═══ Save Confirmation Modal ═══ -->
+<div id="save-confirm-overlay" class="confirm-overlay hidden">
+  <div class="confirm-box">
+    <div class="confirm-header">
+      <h3>💾 Confirm Save to GitHub</h3>
+      <span class="changes-count" id="confirm-changes-count">0 changes</span>
+    </div>
+    <div class="confirm-body" id="confirm-body">
+      <div class="confirm-empty">No changes detected.</div>
+    </div>
+    <div class="confirm-footer">
+      <button class="btn btn-ghost" onclick="hideSaveConfirm()">Cancel</button>
+      <button class="btn btn-primary" onclick="confirmSave()">Confirm &amp; Save to GitHub</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast-container" id="toast-container"></div>
 
 <!-- ═══ Scroll to top button ═══ -->
@@ -447,6 +529,7 @@ let currentPage = null;      // Currently edited page name (null = dashboard)
 let searchResults = [];      // Global search results
 let devModeVisible = false;  // Dev options expanded?
 let previewVisible = false;  // Preview panel visible?
+let originalFlatData = {};   // Snapshot of flatData when last loaded/saved
 
 // ═══════════════════════════════════════════════════════════════════
 // Live Preview
@@ -655,10 +738,11 @@ function renderPreview() {
 async function init() {
   setStatus('Loading content...');
   try {
-    const res = await fetch('https://cdn.jsdelivr.net/gh/myelektra/glm-weebly-theme@master/weebly-theme/content-config.json');
+    const res = await fetch('https://cdn.jsdelivr.net/gh/myelektra/glm-weebly-theme@master/weebly-theme/content-config.json?cb=' + Date.now());
     if (!res.ok) throw new Error('HTTP ' + res.status);
     config = await res.json();
     flatData = flatten(config);
+    originalFlatData = Object.assign({}, flatData);
     renderDashboard();
     // Raw JSON
     document.getElementById('raw-json-text').value = JSON.stringify(config, null, 2);
@@ -1023,6 +1107,7 @@ function applyRawToForm() {
     const parsed = JSON.parse(document.getElementById('raw-json-text').value);
     config = parsed;
     flatData = flatten(parsed);
+    originalFlatData = Object.assign({}, flatData);
     if (currentPage) {
       openPage(currentPage);
     }
@@ -1030,6 +1115,127 @@ function applyRawToForm() {
   } catch (e) {
     toast('Invalid JSON: ' + e.message, 'error');
   }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// Save Confirmation Dialog
+// ═══════════════════════════════════════════════════════════════════
+function computeChanges() {
+  const changes = [];
+  const changedPaths = new Set();
+  
+  // Find changed paths
+  for (const path in flatData) {
+    const original = originalFlatData[path];
+    const current = flatData[path];
+    if (original !== current) {
+      changedPaths.add(path);
+    }
+  }
+  // Also check for paths in originalFlatData that were removed from flatData
+  for (const path in originalFlatData) {
+    if (!(path in flatData)) {
+      changedPaths.add(path);
+    }
+  }
+  
+  if (changedPaths.size === 0) return changes;
+  
+  // Group by page using ADMIN_FIELD_MAP
+  const pageMap = {};
+  for (const page of ADMIN_FIELD_MAP) {
+    for (const section of page.sections) {
+      for (const field of section.fields) {
+        if (changedPaths.has(field.path)) {
+          if (!pageMap[page.page]) pageMap[page.page] = { icon: page.icon, sections: {} };
+          if (!pageMap[page.page].sections[section.name]) pageMap[page.page].sections[section.name] = [];
+          pageMap[page.page].sections[section.name].push({
+            label: field.label,
+            path: field.path,
+            oldVal: originalFlatData[field.path] !== undefined ? originalFlatData[field.path] : '',
+            newVal: flatData[field.path] !== undefined ? flatData[field.path] : ''
+          });
+        }
+      }
+    }
+  }
+  
+  // Convert to array sorted by page order
+  const pageOrder = ADMIN_FIELD_MAP.map(p => p.page);
+  const result = [];
+  for (const pageName of pageOrder) {
+    if (pageMap[pageName]) {
+      result.push({
+        page: pageName,
+        icon: pageMap[pageName].icon,
+        sections: pageMap[pageName].sections
+      });
+    }
+  }
+  
+  return result;
+}
+
+function showSaveConfirm() {
+  const changes = computeChanges();
+  const overlay = document.getElementById('save-confirm-overlay');
+  const body = document.getElementById('confirm-body');
+  const countEl = document.getElementById('confirm-changes-count');
+  
+  // Count individual changed fields
+  let totalChanged = 0;
+  for (const page of changes) {
+    for (const sectionName in page.sections) {
+      totalChanged += page.sections[sectionName].length;
+    }
+  }
+  
+  countEl.textContent = totalChanged + ' change' + (totalChanged !== 1 ? 's' : '');
+  
+  if (totalChanged === 0) {
+    body.innerHTML = '<div class="confirm-empty">✅ No changes detected. Everything is up to date.</div>';
+    overlay.classList.remove('hidden');
+    return;
+  }
+  
+  let html = '';
+  for (const page of changes) {
+    html += '<div class="confirm-change-group">';
+    html += '<div class="confirm-change-group-header">' + page.icon + ' ' + page.page + '</div>';
+    for (const sectionName in page.sections) {
+      const fields = page.sections[sectionName];
+      for (const field of fields) {
+        html += '<div class="confirm-change-item">';
+        html += '<div class="confirm-change-label">' + escapeHtml(field.label) + '</div>';
+        html += '<div style="font-size:10px;color:#9CA3AF;margin-bottom:4px">' + escapeHtml(sectionName) + '</div>';
+        html += '<div class="confirm-change-compare">';
+        html += '<span class="confirm-change-old">Old:</span>';
+        html += '<span class="confirm-change-val-old" title="' + escapeHtml(field.oldVal) + '">' + escapeHtml(truncateMiddle(field.oldVal, 80)) + '</span>';
+        html += '<span class="confirm-change-new">New:</span>';
+        html += '<span class="confirm-change-val-new" title="' + escapeHtml(field.newVal) + '">' + escapeHtml(truncateMiddle(field.newVal, 80)) + '</span>';
+        html += '</div></div>';
+      }
+    }
+    html += '</div>';
+  }
+  
+  body.innerHTML = html;
+  overlay.classList.remove('hidden');
+}
+
+function hideSaveConfirm() {
+  document.getElementById('save-confirm-overlay').classList.add('hidden');
+}
+
+function confirmSave() {
+  hideSaveConfirm();
+  doSave(unflatten(flatData));
+}
+
+function truncateMiddle(str, maxLen) {
+  if (!str || str.length <= maxLen) return str || '';
+  const half = Math.floor((maxLen - 3) / 2);
+  return str.slice(0, half) + '...' + str.slice(str.length - half);
 }
 
 // ═══════════════════════════════════════════════════════════════════
@@ -1056,6 +1262,7 @@ function uploadJSON(event) {
       const parsed = JSON.parse(e.target.result);
       config = parsed;
       flatData = flatten(parsed);
+      originalFlatData = Object.assign({}, flatData);
       document.getElementById('raw-json-text').value = JSON.stringify(parsed, null, 2);
       if (currentPage) {
         openPage(currentPage);
@@ -1071,7 +1278,13 @@ function uploadJSON(event) {
   event.target.value = '';
 }
 
-async function saveToGitHub() { await doSave(unflatten(flatData)); }
+async function saveToGitHub() {
+  if (!isDirty) {
+    toast('No changes to save', 'info');
+    return;
+  }
+  showSaveConfirm();
+}
 async function saveFromRaw() {
   try {
     const parsed = JSON.parse(document.getElementById('raw-json-text').value);
@@ -1096,6 +1309,7 @@ async function doSave(data) {
     const result = await res.json();
     isDirty = false;
     updateDirtyIndicator();
+    originalFlatData = Object.assign({}, flatData);
     toast('Saved! Commit: ' + (result.commit ? result.commit.slice(0,7) : 'done'), 'success');
     setStatus('Last saved: ' + new Date().toLocaleTimeString());
   } catch (e) {
