@@ -26,11 +26,11 @@ Client tinggal edit form, klik Save — otomatis commit ke GitHub & trigger buil
 
 1. Buka https://dash.cloudflare.com → **Pages**
 2. Klik **Create a application** → **Pages** → **Connect to Git**
-3. Pilih repo `client-coder/glm-weebly-theme`
+3. Pilih repo `myelektra/content-editor`
 4. Set:
    - **Project name:** `myelektra-content-editor`
    - **Production branch:** `master`
-   - **Build output directory:** `cloudflare`
+   - **Build output directory:** `/` (root)
    - **Build command:** (kosongkan — static site)
 5. Klik **Save and Deploy**
 
@@ -63,6 +63,7 @@ URL: `https://myelektra-content-editor.pages.dev`
 
 ## Catatan
 
-- `GITHUB_TOKEN` harus punya akses **repo** ke `client-coder/glm-weebly-theme`
+- `GITHUB_TOKEN` harus punya akses **repo** ke `myelektra/glm-weebly-theme`
 - Setiap Save → commit ke `master` → GitHub Actions (`build-weebly.yml`) jalan → build zip
 - Download zip dari Actions → upload ke Weebly
+
