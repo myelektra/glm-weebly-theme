@@ -146,3 +146,4 @@ The Resources page uses static article cards. To add dynamic blog content, integ
 
 ## Disclaimer
 "Meetings and revenue outcomes are not guaranteed. Results depend on market conditions, offer relevance, buyer readiness, domain reputation, and the client's sales process."
+
