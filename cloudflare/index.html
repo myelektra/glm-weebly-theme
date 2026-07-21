@@ -4,103 +4,383 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Myelektra — Content Editor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f6fa; color: #1a1a2e; }
-.topbar { background: #0f1b2d; color: #fff; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
-.topbar h1 { font-size: 18px; font-weight: 600; }
-.topbar .status { font-size: 12px; color: #8ba0c5; }
-.container { max-width: 960px; margin: 0 auto; padding: 24px; }
-.actions { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
-.btn { padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; border: none; transition: all .2s; display: inline-flex; align-items: center; gap: 6px; }
-.btn-primary { background: #1877F2; color: #fff; }
+/* ─── Reset & Base ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #f0f2f5; color: #1a1a2e; line-height: 1.5;
+}
+
+/* ─── Top Bar ─── */
+.topbar {
+  background: linear-gradient(135deg, #0F1B2D 0%, #1a2744 100%);
+  color: #fff; padding: 14px 24px; display: flex; align-items: center;
+  justify-content: space-between; position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.topbar-left { display: flex; align-items: center; gap: 12px; }
+.topbar-logo { display: flex; align-items: baseline; gap: 0; }
+.topbar-logo .main { font-size: 22px; font-weight: 700; color: #fff; }
+.topbar-logo .dotcom { font-size: 12px; color: #4a8bf5; font-weight: 600; }
+.topbar h1 { font-size: 16px; font-weight: 600; opacity: 0.9; }
+.topbar .status { font-size: 11px; color: #8ba0c5; margin-top: 2px; }
+.topbar-right { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+
+/* ─── Buttons ─── */
+.btn {
+  padding: 7px 14px; border-radius: 6px; font-size: 12px; font-weight: 500;
+  cursor: pointer; border: none; transition: all .2s;
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: inherit; white-space: nowrap;
+}
+.btn-primary { background: #1A73E8; color: #fff; }
 .btn-primary:hover { background: #1558b0; }
-.btn-outline { background: transparent; border: 1px solid #c4cbd8; color: #1a1a2e; }
-.btn-outline:hover { background: #eef0f4; }
-.btn-success { background: #00c896; color: #fff; }
+.btn-outline { background: transparent; border: 1px solid rgba(255,255,255,0.25); color: rgba(255,255,255,0.85); }
+.btn-outline:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.4); }
+.btn-success { background: #00C896; color: #fff; }
 .btn-success:hover { background: #00a87a; }
+.btn-warning { background: #FFB800; color: #1a1a2e; }
+.btn-warning:hover { background: #e5a500; }
 .btn-danger { background: #ef4444; color: #fff; }
 .btn-danger:hover { background: #dc2626; }
+.btn-ghost { background: transparent; border: 1px solid #d0d5dd; color: #1a1a2e; }
+.btn-ghost:hover { background: #f0f2f5; }
 .btn:disabled { opacity: .5; cursor: wait; }
-.section-group { background: #fff; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 16px; }
-.section-header { padding: 14px 20px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; user-select: none; }
-.section-header .arrow { transition: transform .2s; }
+.btn-sm { padding: 5px 10px; font-size: 11px; }
+
+/* ─── Container ─── */
+.container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+
+/* ─── Dashboard ─── */
+.dashboard-header { margin-bottom: 24px; }
+.dashboard-header h2 { font-size: 20px; font-weight: 700; color: #0F1B2D; margin-bottom: 4px; }
+.dashboard-header p { font-size: 13px; color: #6B7280; }
+
+.page-grid {
+  display: grid; gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  margin-bottom: 32px;
+}
+.page-card {
+  background: #fff; border-radius: 10px; border: 1px solid #e2e8f0;
+  padding: 18px 16px; cursor: pointer; transition: all .2s;
+  display: flex; flex-direction: column; gap: 6px;
+  position: relative; overflow: hidden;
+}
+.page-card:hover {
+  border-color: #1A73E8; box-shadow: 0 4px 12px rgba(26,115,232,0.12);
+  transform: translateY(-2px);
+}
+.page-card:active { transform: translateY(0); }
+.page-card-icon { font-size: 28px; line-height: 1; }
+.page-card-name { font-size: 14px; font-weight: 600; color: #0F1B2D; }
+.page-card-count { font-size: 11px; color: #9CA3AF; }
+.page-card-badge {
+  position: absolute; top: 12px; right: 12px;
+  background: #e8f4fd; color: #1A73E8; font-size: 10px;
+  font-weight: 600; padding: 2px 7px; border-radius: 10px;
+}
+
+/* ─── Page Editor ─── */
+.editor-header {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 20px; flex-wrap: wrap;
+}
+.editor-header h2 { font-size: 18px; font-weight: 700; color: #0F1B2D; flex: 1; }
+.back-btn {
+  padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 500;
+  cursor: pointer; border: 1px solid #d0d5dd; background: #fff; color: #1a1a2e;
+  transition: all .2s; font-family: inherit;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.back-btn:hover { background: #f0f2f5; }
+
+/* ─── Search Bar ─── */
+.search-bar {
+  position: relative; margin-bottom: 20px; flex: 1; max-width: 400px;
+}
+.search-bar input {
+  width: 100%; padding: 8px 12px 8px 34px; border: 1px solid #e2e8f0;
+  border-radius: 8px; font-size: 13px; font-family: inherit;
+  color: #1a1a2e; background: #fff; transition: border-color .2s;
+}
+.search-bar input:focus { outline: none; border-color: #1A73E8; box-shadow: 0 0 0 3px rgba(26,115,232,0.1); }
+.search-bar .search-icon {
+  position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+  color: #9CA3AF; font-size: 14px; pointer-events: none;
+}
+
+/* ─── Section Groups ─── */
+.section-group {
+  background: #fff; border-radius: 10px; border: 1px solid #e2e8f0;
+  margin-bottom: 14px; overflow: hidden;
+  transition: box-shadow .2s;
+}
+.section-group:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+
+.section-header {
+  padding: 12px 18px; font-size: 13px; font-weight: 600;
+  cursor: pointer; display: flex; justify-content: space-between;
+  align-items: center; user-select: none;
+  background: #fafbfc; border-bottom: 1px solid #e2e8f0;
+  transition: background .2s;
+}
+.section-header:hover { background: #f0f2f5; }
+.section-header .arrow {
+  transition: transform .2s; font-size: 10px; color: #9CA3AF;
+}
 .section-header.collapsed .arrow { transform: rotate(-90deg); }
-.section-body { padding: 16px 20px; }
+.section-header .section-name { display: flex; align-items: center; gap: 8px; }
+.section-header .section-desc { font-size: 11px; font-weight: 400; color: #9CA3AF; }
+
+.section-body { padding: 14px 18px 18px; }
 .section-body.hidden { display: none; }
-.field { margin-bottom: 14px; }
-.field:last-child { margin-bottom: 0; }
-.field label { display: block; font-size: 12px; font-weight: 600; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: .03em; word-break: break-all; }
-.field input, .field textarea { width: 100%; padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 14px; color: #1a1a2e; font-family: inherit; transition: border-color .2s; }
-.field input:focus, .field textarea:focus { outline: none; border-color: #1877F2; box-shadow: 0 0 0 3px rgba(24,119,242,.1); }
-.field textarea { min-height: 60px; resize: vertical; }
-.toast { position: fixed; bottom: 24px; right: 24px; padding: 12px 20px; border-radius: 8px; color: #fff; font-size: 14px; font-weight: 500; z-index: 100; opacity: 0; transform: translateY(20px); transition: all .3s; }
+
+/* ─── Fields ─── */
+.field-row {
+  display: grid; grid-template-columns: 180px 1fr; gap: 8px;
+  margin-bottom: 10px; align-items: start;
+}
+.field-row:last-child { margin-bottom: 0; }
+.field-label-wrap { padding-top: 6px; }
+.field-label {
+  display: block; font-size: 12px; font-weight: 600; color: #374151;
+  word-break: break-word;
+}
+.field-desc { font-size: 10px; color: #9CA3AF; margin-top: 1px; line-height: 1.4; }
+.field-input {
+  width: 100%; padding: 7px 10px; border: 1px solid #e2e8f0;
+  border-radius: 6px; font-size: 13px; color: #1a1a2e;
+  font-family: inherit; transition: all .2s;
+}
+.field-input:focus { outline: none; border-color: #1A73E8; box-shadow: 0 0 0 3px rgba(26,115,232,0.1); }
+.field-textarea {
+  min-height: 50px; resize: vertical; line-height: 1.5;
+}
+.field-input:hover { border-color: #c4cbd8; }
+.field-input::placeholder { color: #c4cbd8; }
+
+/* ─── Unsaved indicator ─── */
+.unsaved-dot {
+  display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+  background: #FFB800; margin-left: 6px; vertical-align: middle;
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ─── Dev toggle / Raw JSON ─── */
+.dev-zone {
+  margin-top: 24px; padding-top: 16px; border-top: 1px dashed #d0d5dd;
+}
+.dev-toggle {
+  font-size: 11px; color: #9CA3AF; cursor: pointer; user-select: none;
+  display: inline-flex; align-items: center; gap: 4px;
+  transition: color .2s;
+}
+.dev-toggle:hover { color: #6B7280; }
+.dev-content { margin-top: 12px; }
+.raw-json {
+  width: 100%; min-height: 300px;
+  font-family: 'SF Mono', 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 12px; padding: 14px; border: 1px solid #e2e8f0;
+  border-radius: 8px; resize: vertical; line-height: 1.6;
+}
+.raw-json:focus { outline: none; border-color: #1A73E8; }
+
+/* ─── Toast ─── */
+.toast-container {
+  position: fixed; bottom: 20px; right: 20px; z-index: 200;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.toast {
+  padding: 10px 16px; border-radius: 8px; color: #fff;
+  font-size: 13px; font-weight: 500; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  opacity: 0; transform: translateY(10px); transition: all .3s;
+  max-width: 360px;
+}
 .toast.show { opacity: 1; transform: translateY(0); }
-.toast.success { background: #00c896; }
+.toast.success { background: #00C896; }
 .toast.error { background: #ef4444; }
-.toast.info { background: #1877F2; }
-.hidden { display: none !important; }
-.raw-json { width: 100%; min-height: 400px; font-family: 'JetBrains Mono', 'SF Mono', monospace; font-size: 13px; padding: 16px; border: 1px solid #e2e8f0; border-radius: 8px; resize: vertical; }
-.saving-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 200; display: flex; align-items: center; justify-content: center; }
-.saving-box { background: #fff; padding: 32px; border-radius: 12px; text-align: center; }
-.spinner { width: 32px; height: 32px; border: 3px solid #e2e8f0; border-top-color: #1877F2; border-radius: 50%; animation: spin .6s linear infinite; margin: 0 auto 12px; }
+.toast.info { background: #1A73E8; }
+.toast.warning { background: #FFB800; color: #1a1a2e; }
+
+/* ─── Saving Overlay ─── */
+.saving-overlay {
+  position: fixed; inset: 0; background: rgba(15,27,45,0.6);
+  z-index: 150; display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(2px);
+}
+.saving-box {
+  background: #fff; padding: 32px 40px; border-radius: 14px;
+  text-align: center; box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+.spinner {
+  width: 32px; height: 32px; border: 3px solid #e2e8f0;
+  border-top-color: #1A73E8; border-radius: 50%;
+  animation: spin .6s linear infinite; margin: 0 auto 10px;
+}
 @keyframes spin { to { transform: rotate(360deg); } }
-@media (max-width: 640px) { .container { padding: 16px; } .topbar { flex-wrap: wrap; gap: 8px; } }
+.saving-box p { font-size: 14px; color: #374151; }
+.saving-box small { font-size: 11px; color: #9CA3AF; display: block; margin-top: 4px; }
+
+/* ─── Empty state ─── */
+.empty-state { text-align: center; padding: 40px 20px; color: #9CA3AF; }
+.empty-state .icon { font-size: 36px; margin-bottom: 8px; }
+.empty-state p { font-size: 14px; }
+
+/* ─── Hidden ─── */
+.hidden { display: none !important; }
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .topbar { flex-wrap: wrap; gap: 8px; padding: 10px 16px; }
+  .topbar-right { width: 100%; justify-content: flex-end; }
+  .page-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+  .field-row { grid-template-columns: 1fr; gap: 4px; }
+  .field-label-wrap { padding-top: 0; }
+  .container { padding: 16px; }
+}
+@media (max-width: 480px) {
+  .page-grid { grid-template-columns: repeat(2, 1fr); }
+  .topbar h1 { font-size: 14px; }
+}
+
+/* ─── Back to top (editor scroll) ─── */
+.editor-scroll-top {
+  position: fixed; bottom: 70px; right: 20px;
+  width: 36px; height: 36px; border-radius: 50%;
+  background: #fff; border: 1px solid #e2e8f0; color: #6B7280;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all .2s; z-index: 50;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.editor-scroll-top:hover { background: #f0f2f5; transform: translateY(-2px); }
 </style>
 </head>
 <body>
 
+<!-- ═══ Top Bar ═══ -->
 <div class="topbar">
-  <div>
-    <h1>Myelektra Content Editor</h1>
-    <div class="status" id="status">Loading...</div>
+  <div class="topbar-left">
+    <div class="topbar-logo">
+      <span class="main">myelektra</span><span class="dotcom">.com</span>
+    </div>
+    <div style="width:1px;height:24px;background:rgba(255,255,255,0.15);margin:0 4px"></div>
+    <div>
+      <h1>Content Editor</h1>
+      <div class="status" id="status">Loading...</div>
+    </div>
   </div>
-  <div style="display:flex;gap:8px;flex-wrap:wrap">
-    <button class="btn btn-outline" onclick="downloadJSON()">⬇ Download JSON</button>
-    <button class="btn btn-outline" onclick="document.getElementById('upload-input').click()">⬆ Upload JSON</button>
+  <div class="topbar-right">
+    <button class="btn btn-outline" onclick="downloadJSON()" id="btn-download">⬇ Download</button>
+    <button class="btn btn-outline" onclick="document.getElementById('upload-input').click()">⬆ Upload</button>
     <input type="file" id="upload-input" accept=".json" class="hidden" onchange="uploadJSON(event)">
-    <button class="btn btn-success" onclick="saveToGitHub()">💾 Save to GitHub</button>
+    <button class="btn btn-success" onclick="saveToGitHub()" id="btn-save">💾 Save to GitHub</button>
   </div>
 </div>
 
-<div class="container">
-  <div class="actions">
-    <button class="btn btn-outline" onclick="switchView('form')" id="tab-form">📝 Form</button>
-    <button class="btn btn-outline" onclick="switchView('raw')" id="tab-raw">📄 Raw JSON</button>
+<!-- ═══ Main Container ═══ -->
+<div class="container" id="app-container">
+
+  <!-- Dashboard View -->
+  <div id="dashboard-view">
+    <div class="dashboard-header">
+      <h2>✏️ Edit Website Content</h2>
+      <p>Select a page below to edit its text content. Changes are saved to GitHub, then deployed to Weebly.</p>
+    </div>
+
+    <!-- Search -->
+    <div class="search-bar" id="dashboard-search">
+      <span class="search-icon">🔍</span>
+      <input type="text" placeholder="Search fields across all pages..." id="global-search" oninput="onGlobalSearch(this.value)">
+    </div>
+
+    <!-- Page Grid -->
+    <div class="page-grid" id="page-grid"></div>
+
+    <!-- Global search results -->
+    <div id="global-search-results"></div>
   </div>
-  <div id="form-view"></div>
-  <div id="raw-view" class="hidden">
-    <textarea class="raw-json" id="raw-json-text"></textarea>
-    <div style="margin-top:8px;display:flex;gap:8px">
-      <button class="btn btn-primary" onclick="rawToForm()">Apply to Form</button>
-      <button class="btn btn-success" onclick="saveFromRaw()">Save Raw to GitHub</button>
+
+  <!-- Editor View -->
+  <div id="editor-view" class="hidden">
+    <div class="editor-header">
+      <button class="back-btn" onclick="showDashboard()">← Back</button>
+      <h2 id="editor-title"></h2>
+      <div style="flex:1"></div>
+      <span id="unsaved-indicator" class="hidden"></span>
+    </div>
+    <div id="editor-content"></div>
+
+    <!-- Developer Zone -->
+    <div class="dev-zone">
+      <div class="dev-toggle" onclick="toggleDevMode()" id="dev-toggle">
+        🔧 Developer Options
+      </div>
+      <div class="dev-content hidden" id="dev-content">
+        <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap">
+          <button class="btn btn-ghost btn-sm" onclick="switchToRaw()">📄 Edit Raw JSON</button>
+          <button class="btn btn-ghost btn-sm" onclick="downloadJSON()">⬇ Download content-config.json</button>
+          <button class="btn btn-ghost btn-sm" onclick="document.getElementById('upload-input-dev').click()">⬆ Upload JSON</button>
+          <input type="file" id="upload-input-dev" accept=".json" class="hidden" onchange="uploadJSON(event)">
+        </div>
+        <div id="raw-editor-wrap" class="hidden">
+          <textarea class="raw-json" id="raw-json-text" placeholder="Raw JSON content..."></textarea>
+          <div style="margin-top:8px;display:flex;gap:8px">
+            <button class="btn btn-primary btn-sm" onclick="applyRawToForm()">Apply Raw to Form</button>
+            <button class="btn btn-success btn-sm" onclick="saveFromRaw()">Save Raw to GitHub</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
+<!-- ═══ Overlay & Toast ═══ -->
 <div id="saving-overlay" class="saving-overlay hidden">
   <div class="saving-box">
     <div class="spinner"></div>
     <p>Saving to GitHub...</p>
+    <small>Committing content-config.json to the repository</small>
   </div>
 </div>
+<div class="toast-container" id="toast-container"></div>
 
-<div id="toast" class="toast"></div>
+<!-- ═══ Scroll to top button ═══ -->
+<div class="editor-scroll-top hidden" id="scroll-top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</div>
 
+<!-- ═══ Script ═══ -->
+<script src="admin-config.js"></script>
 <script>
-// ─── State ───
-let config = null;
-let flatData = {};
+// ═══════════════════════════════════════════════════════════════════
+// State
+// ═══════════════════════════════════════════════════════════════════
+let config = null;           // Full loaded config
+let flatData = {};           // Flattened { 'path.to.key': value }
+let isDirty = false;         // Unsaved changes?
+let currentPage = null;      // Currently edited page name (null = dashboard)
+let searchResults = [];      // Global search results
+let devModeVisible = false;  // Dev options expanded?
 
-// ─── Init ───
+// ═══════════════════════════════════════════════════════════════════
+// Init
+// ═══════════════════════════════════════════════════════════════════
 async function init() {
   setStatus('Loading content...');
   try {
-    const res = await fetch('https://cdn.jsdelivr.net/gh/client-coder/glm-weebly-theme@master/weebly-theme/content-config.json');
+    const res = await fetch('https://cdn.jsdelivr.net/gh/myelektra/glm-weebly-theme@master/weebly-theme/content-config.json');
     if (!res.ok) throw new Error('HTTP ' + res.status);
     config = await res.json();
     flatData = flatten(config);
-    renderForm();
+    renderDashboard();
+    // Raw JSON
     document.getElementById('raw-json-text').value = JSON.stringify(config, null, 2);
     setStatus('Loaded — ' + Object.keys(flatData).length + ' editable fields');
   } catch (e) {
@@ -109,7 +389,9 @@ async function init() {
   }
 }
 
-// ─── Flatten JSON → { 'path.to.key': value } ───
+// ═══════════════════════════════════════════════════════════════════
+// Flatten / Unflatten (same as before)
+// ═══════════════════════════════════════════════════════════════════
 function flatten(obj, prefix, result) {
   result = result || {};
   prefix = prefix || '';
@@ -129,7 +411,6 @@ function flatten(obj, prefix, result) {
   return result;
 }
 
-// ─── Unflatten ───
 function unflatten(data) {
   const result = {};
   for (const path in data) {
@@ -145,88 +426,331 @@ function unflatten(data) {
       }
     }
   }
+  // Post-process: convert objects with all-numeric keys to arrays
+  function convertToArrays(obj) {
+    if (obj === null || typeof obj !== 'object' || Array.isArray(obj)) return;
+    const allNumeric = Object.keys(obj).length > 0 && Object.keys(obj).every(k => /^\d+$/.test(k));
+    if (allNumeric) {
+      const nums = Object.keys(obj).map(Number);
+      const max = Math.max(...nums);
+      const arr = new Array(max + 1);
+      for (let i = 0; i <= max; i++) {
+        arr[i] = obj[i] !== undefined ? obj[i] : null;
+      }
+      // Recurse then replace in parent
+      arr.forEach(convertToArrays);
+      // Mutate the original object to become an array
+      for (const key in obj) delete obj[key];
+      arr.forEach((val, i) => { obj[i] = val; });
+      Object.defineProperty(obj, 'length', { value: arr.length, writable: true });
+      return;
+    }
+    for (const key in obj) {
+      const child = obj[key];
+      if (child !== null && typeof child === 'object' && !Array.isArray(child)) {
+        const childKeys = Object.keys(child);
+        if (childKeys.length > 0 && childKeys.every(k => /^\d+$/.test(k))) {
+          const nums = childKeys.map(Number);
+          const max = Math.max(...nums);
+          const arr = new Array(max + 1);
+          for (let i = 0; i <= max; i++) {
+            arr[i] = child[i] !== undefined ? child[i] : null;
+          }
+          arr.forEach(convertToArrays);
+          obj[key] = arr;
+        } else {
+          convertToArrays(child);
+        }
+      } else if (Array.isArray(child)) {
+        child.forEach(convertToArrays);
+      }
+    }
+  }
+  convertToArrays(result);
   return result;
 }
 
-// ─── Render form from flat data ───
-function renderForm() {
-  const groups = {};
-  for (const path in flatData) {
-    const parts = path.split('.');
-    const group = parts.length > 1 ? parts.slice(0, -1).join('.') : 'general';
-    if (!groups[group]) groups[group] = {};
-    groups[group][path] = flatData[path];
+// ═══════════════════════════════════════════════════════════════════
+// Resolve a dot-path value from an object
+// ═══════════════════════════════════════════════════════════════════
+function resolvePath(obj, path) {
+  const parts = path.split('.');
+  let cur = obj;
+  for (const p of parts) {
+    if (cur == null || typeof cur !== 'object') return undefined;
+    if (Array.isArray(cur)) {
+      const idx = parseInt(p, 10);
+      if (isNaN(idx) || idx < 0 || idx >= cur.length) return undefined;
+      cur = cur[idx];
+    } else {
+      if (!(p in cur)) return undefined;
+      cur = cur[p];
+    }
+  }
+  return cur;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// Dashboard
+// ═══════════════════════════════════════════════════════════════════
+function renderDashboard() {
+  const grid = document.getElementById('page-grid');
+  grid.innerHTML = '';
+
+  // Count fields per page from admin-config
+  for (const page of ADMIN_FIELD_MAP) {
+    let totalFields = 0;
+    for (const section of page.sections) {
+      totalFields += section.fields.length;
+    }
+    const card = document.createElement('div');
+    card.className = 'page-card';
+    card.innerHTML = `
+      <div class="page-card-icon">${page.icon}</div>
+      <div class="page-card-name">${page.page}</div>
+      <div class="page-card-count">${totalFields} field${totalFields !== 1 ? 's' : ''}</div>
+      <div class="page-card-badge">Edit</div>
+    `;
+    card.onclick = function() { openPage(page.page); };
+    grid.appendChild(card);
   }
 
-  const container = document.getElementById('form-view');
+  // Hide search results
+  document.getElementById('global-search-results').innerHTML = '';
+  document.getElementById('global-search').value = '';
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// Open a page for editing
+// ═══════════════════════════════════════════════════════════════════
+function openPage(pageName) {
+  currentPage = pageName;
+  const pageDef = ADMIN_FIELD_MAP.find(p => p.page === pageName);
+  if (!pageDef) { toast('Page not found: ' + pageName, 'error'); return; }
+
+  document.getElementById('dashboard-view').classList.add('hidden');
+  document.getElementById('editor-view').classList.remove('hidden');
+  document.getElementById('editor-title').textContent = pageDef.icon + ' ' + pageDef.page;
+
+  const container = document.getElementById('editor-content');
   container.innerHTML = '';
 
-  for (const group in groups) {
-    const section = document.createElement('div');
-    section.className = 'section-group';
+  for (const section of pageDef.sections) {
+    const group = document.createElement('div');
+    group.className = 'section-group';
 
+    // Header
     const header = document.createElement('div');
     header.className = 'section-header';
-    header.innerHTML = `<span>${group}</span><span class="arrow">▼</span>`;
+    const nameWrap = document.createElement('div');
+    nameWrap.className = 'section-name';
+    nameWrap.innerHTML = `<span>${section.name}</span>`;
+    if (section.description) {
+      const desc = document.createElement('span');
+      desc.className = 'section-desc';
+      desc.textContent = section.description;
+      nameWrap.appendChild(desc);
+    }
+    const arrow = document.createElement('span');
+    arrow.className = 'arrow';
+    arrow.textContent = '▼';
+    header.appendChild(nameWrap);
+    header.appendChild(arrow);
     header.onclick = function() {
       const body = this.nextElementSibling;
       body.classList.toggle('hidden');
       this.classList.toggle('collapsed');
     };
 
+    // Body
     const body = document.createElement('div');
     body.className = 'section-body';
 
-    for (const path in groups[group]) {
-      const val = groups[group][path];
-      const f = document.createElement('div');
-      f.className = 'field';
-      const label = document.createElement('label');
-      label.textContent = path;
-      const isLong = typeof val === 'string' && val.length > 80;
+    for (const field of section.fields) {
+      const raw = flatData[field.path];
+      const currentVal = raw !== undefined ? raw : resolvePath(config, field.path);
+      if (currentVal === undefined) continue; // Skip if path doesn't exist in current config
+
+      const row = document.createElement('div');
+      row.className = 'field-row';
+
+      // Label
+      const labelWrap = document.createElement('div');
+      labelWrap.className = 'field-label-wrap';
+      const label = document.createElement('span');
+      label.className = 'field-label';
+      label.textContent = field.label;
+      labelWrap.appendChild(label);
+      if (field.desc) {
+        const desc = document.createElement('div');
+        desc.className = 'field-desc';
+        desc.textContent = field.desc;
+        labelWrap.appendChild(desc);
+      }
+      row.appendChild(labelWrap);
+
+      // Input
+      const isLong = typeof currentVal === 'string' && currentVal.length > 60;
       const input = document.createElement(isLong ? 'textarea' : 'input');
+      input.className = 'field-input' + (isLong ? ' field-textarea' : '');
       if (!isLong) input.type = 'text';
-      input.value = val;
-      input.dataset.path = path;
-      input.oninput = function() { flatData[this.dataset.path] = this.value; };
-      f.appendChild(label);
-      f.appendChild(input);
-      body.appendChild(f);
+      input.value = currentVal;
+      input.dataset.path = field.path;
+      input.placeholder = field.placeholder || '';
+      input.oninput = function() {
+        flatData[this.dataset.path] = this.value;
+        markDirty();
+      };
+      row.appendChild(input);
+      body.appendChild(row);
     }
 
-    section.appendChild(header);
-    section.appendChild(body);
-    container.appendChild(section);
+    // Only add section if it has visible fields
+    if (body.children.length > 0) {
+      group.appendChild(header);
+      group.appendChild(body);
+      container.appendChild(group);
+    }
+  }
+
+  // Reset dirty state
+  isDirty = false;
+  updateDirtyIndicator();
+
+  // Scroll to top
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// Back to Dashboard
+// ═══════════════════════════════════════════════════════════════════
+function showDashboard() {
+  if (isDirty) {
+    if (!confirm('You have unsaved changes. Go back anyway?')) return;
+  }
+  currentPage = null;
+  document.getElementById('dashboard-view').classList.remove('hidden');
+  document.getElementById('editor-view').classList.add('hidden');
+  renderDashboard();
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// Dirty tracking
+// ═══════════════════════════════════════════════════════════════════
+function markDirty() {
+  if (!isDirty) {
+    isDirty = true;
+    updateDirtyIndicator();
   }
 }
 
-// ─── View switching ───
-function switchView(view) {
-  document.getElementById('form-view').classList.toggle('hidden', view !== 'form');
-  document.getElementById('raw-view').classList.toggle('hidden', view !== 'raw');
-  document.getElementById('tab-form').classList.toggle('btn-primary', view === 'form');
-  document.getElementById('tab-form').classList.toggle('btn-outline', view !== 'form');
-  document.getElementById('tab-raw').classList.toggle('btn-primary', view === 'raw');
-  document.getElementById('tab-raw').classList.toggle('btn-outline', view !== 'raw');
-  if (view === 'raw') {
-    document.getElementById('raw-json-text').value = JSON.stringify(unflatten(flatData), null, 2);
+function updateDirtyIndicator() {
+  const el = document.getElementById('unsaved-indicator');
+  if (isDirty) {
+    el.className = '';
+    el.innerHTML = '<span class="unsaved-dot"></span><span style="font-size:11px;color:#FFB800;font-weight:500">Unsaved</span>';
+  } else {
+    el.className = 'hidden';
+    el.innerHTML = '';
   }
 }
 
-function rawToForm() {
+// ═══════════════════════════════════════════════════════════════════
+// Global Search
+// ═══════════════════════════════════════════════════════════════════
+function onGlobalSearch(query) {
+  const resultsContainer = document.getElementById('global-search-results');
+  query = query.trim().toLowerCase();
+
+  if (!query) {
+    resultsContainer.innerHTML = '';
+    renderDashboard();
+    return;
+  }
+
+  const matches = [];
+  for (const page of ADMIN_FIELD_MAP) {
+    for (const section of page.sections) {
+      for (const field of section.fields) {
+        const label = field.label.toLowerCase();
+        const desc = (field.desc || '').toLowerCase();
+        const path = field.path.toLowerCase();
+        const val = (flatData[field.path] || '').toLowerCase();
+        if (label.includes(query) || desc.includes(query) || path.includes(query) || val.includes(query)) {
+          matches.push({ page: page, section: section.name, field: field });
+        }
+      }
+    }
+  }
+
+  if (matches.length === 0) {
+    resultsContainer.innerHTML = '<div class="empty-state"><div class="icon">🔍</div><p>No fields match "' + escapeHtml(query) + '"</p></div>';
+    return;
+  }
+
+  // Group results by page
+  const byPage = {};
+  for (const m of matches) {
+    if (!byPage[m.page.page]) byPage[m.page.page] = { icon: m.page.icon, fields: [] };
+    byPage[m.page.page].fields.push(m);
+  }
+
+  let html = '<div style="margin-bottom:12px"><strong style="font-size:13px">🔍 ' + matches.length + ' result' + (matches.length > 1 ? 's' : '') + ' for "' + escapeHtml(query) + '"</strong></div>';
+  for (const pageName in byPage) {
+    const gp = byPage[pageName];
+    html += '<div class="section-group">';
+    html += '<div class="section-header" onclick="this.classList.toggle(\'collapsed\');this.nextElementSibling.classList.toggle(\'hidden\')">';
+    html += '<span>' + gp.icon + ' ' + pageName + ' (' + gp.fields.length + ')</span><span class="arrow">▼</span></div>';
+    html += '<div class="section-body">';
+    for (const m of gp.fields) {
+      html += '<div style="padding:6px 0;border-bottom:1px solid #f0f2f5;cursor:pointer" onclick="openPage(\'' + pageName + '\')">';
+      html += '<div style="font-size:12px;font-weight:600;color:#1A73E8">' + m.field.label + '</div>';
+      html += '<div style="font-size:11px;color:#9CA3AF">' + m.page.page + ' → ' + m.section + '</div>';
+      html += '<div style="font-size:11px;color:#6B7280;margin-top:2px;max-height:32px;overflow:hidden">Current: ' + escapeHtml(flatData[m.field.path] || '') + '</div>';
+      html += '</div>';
+    }
+    html += '</div></div>';
+  }
+  resultsContainer.innerHTML = html;
+
+  // Hide page grid when searching
+  document.getElementById('page-grid').innerHTML = '';
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// Dev Mode Toggle
+// ═══════════════════════════════════════════════════════════════════
+function toggleDevMode() {
+  const content = document.getElementById('dev-content');
+  const toggle = document.getElementById('dev-toggle');
+  devModeVisible = !devModeVisible;
+  content.classList.toggle('hidden', !devModeVisible);
+  toggle.style.color = devModeVisible ? '#6B7280' : '#9CA3AF';
+}
+
+function switchToRaw() {
+  const wrap = document.getElementById('raw-editor-wrap');
+  wrap.classList.remove('hidden');
+  document.getElementById('raw-json-text').value = JSON.stringify(unflatten(flatData), null, 2);
+}
+
+function applyRawToForm() {
   try {
     const parsed = JSON.parse(document.getElementById('raw-json-text').value);
     config = parsed;
     flatData = flatten(parsed);
-    renderForm();
+    if (currentPage) {
+      openPage(currentPage);
+    }
     toast('Raw JSON applied to form', 'success');
-    switchView('form');
   } catch (e) {
     toast('Invalid JSON: ' + e.message, 'error');
   }
 }
 
-// ─── Download JSON ───
+// ═══════════════════════════════════════════════════════════════════
+// Save / Download / Upload
+// ═══════════════════════════════════════════════════════════════════
 function downloadJSON() {
   const data = unflatten(flatData);
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -239,7 +763,6 @@ function downloadJSON() {
   toast('Downloaded!', 'success');
 }
 
-// ─── Upload JSON ───
 function uploadJSON(event) {
   const file = event.target.files[0];
   if (!file) return;
@@ -249,8 +772,12 @@ function uploadJSON(event) {
       const parsed = JSON.parse(e.target.result);
       config = parsed;
       flatData = flatten(parsed);
-      renderForm();
       document.getElementById('raw-json-text').value = JSON.stringify(parsed, null, 2);
+      if (currentPage) {
+        openPage(currentPage);
+      } else {
+        renderDashboard();
+      }
       toast('Uploaded & applied!', 'success');
     } catch (err) {
       toast('Invalid JSON: ' + err.message, 'error');
@@ -260,7 +787,6 @@ function uploadJSON(event) {
   event.target.value = '';
 }
 
-// ─── Save to GitHub ───
 async function saveToGitHub() { await doSave(unflatten(flatData)); }
 async function saveFromRaw() {
   try {
@@ -284,6 +810,8 @@ async function doSave(data) {
       throw new Error(err);
     }
     const result = await res.json();
+    isDirty = false;
+    updateDirtyIndicator();
     toast('Saved! Commit: ' + (result.commit ? result.commit.slice(0,7) : 'done'), 'success');
     setStatus('Last saved: ' + new Date().toLocaleTimeString());
   } catch (e) {
@@ -293,17 +821,49 @@ async function doSave(data) {
   }
 }
 
-// ─── Utils ───
+// ═══════════════════════════════════════════════════════════════════
+// Utilities
+// ═══════════════════════════════════════════════════════════════════
 function setStatus(msg) { document.getElementById('status').textContent = msg; }
 
 function toast(msg, type) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
+  const container = document.getElementById('toast-container');
+  const el = document.createElement('div');
   el.className = 'toast ' + (type || 'info') + ' show';
-  setTimeout(() => el.classList.remove('show'), 3500);
+  el.textContent = msg;
+  container.appendChild(el);
+  setTimeout(() => {
+    el.classList.remove('show');
+    setTimeout(() => el.remove(), 300);
+  }, 3500);
 }
 
-// ─── Start ───
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+            .replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+}
+
+// Scroll to top button visibility
+window.addEventListener('scroll', function() {
+  const btn = document.getElementById('scroll-top-btn');
+  if (window.scrollY > 400 && !document.getElementById('editor-view').classList.contains('hidden')) {
+    btn.classList.remove('hidden');
+  } else {
+    btn.classList.add('hidden');
+  }
+}, {passive: true});
+
+// ═══════════════════════════════════════════════════════════════════
+// Warn before leaving with unsaved changes
+// ═══════════════════════════════════════════════════════════════════
+window.addEventListener('beforeunload', function(e) {
+  if (isDirty) { e.preventDefault(); e.returnValue = ''; }
+});
+
+// ═══════════════════════════════════════════════════════════════════
+// Start
+// ═══════════════════════════════════════════════════════════════════
 init();
 </script>
 </body>
