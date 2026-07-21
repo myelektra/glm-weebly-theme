@@ -574,7 +574,6 @@ function renderPreview() {
     html += '<h1 class="preview-headline" style="font-size:24px">' + escapeHtml(getPreviewVal('industriesPage.hero.headline')) + '</h1>';
     html += '<p class="preview-subtitle">' + escapeHtml(getPreviewVal('industriesPage.hero.subtitle')) + '</p>';
     html += '<div class="preview-divider"></div>';
-    var industryNames = ['Manufacturing', 'SaaS and Technology', 'Banking and Financial Services', 'BPO and Business Services', 'Professional Services and Consulting'];
     for (var i = 0; i < 5; i++) {
       html += '<div class="preview-card">';
       html += '<div class="preview-card-title">' + escapeHtml(getPreviewVal('industries.' + i + '.name')) + '</div>';
@@ -611,7 +610,6 @@ function renderPreview() {
     html += '<p class="preview-subtitle">' + escapeHtml(getPreviewVal('pricingPage.hero.subtitle')) + '</p>';
     html += '<div class="preview-divider"></div>';
     html += '<div class="preview-section-title">' + escapeHtml(getPreviewVal('pricingPage.comparisonHeadline')) + '</div>';
-    var solNames = ['Revenue Intelligence', 'Pipeline Builder', 'Revenue Engine', 'AI Adoption Journey', 'Fractional Revenue Office'];
     for (var i = 0; i < 5; i++) {
       html += '<div class="preview-card"' + (String(getPreviewVal('solutions.' + i + '.isPopular')) === 'true' ? ' style="border-color:#FFB800"' : '') + '>';
       html += '<div class="preview-card-title">' + escapeHtml(getPreviewVal('solutions.' + i + '.name'));
