@@ -568,6 +568,62 @@ function renderPreview() {
     html += '<div class="preview-text"><strong style="color:#fff">Phone:</strong> ' + escapeHtml(getPreviewVal('brand.phone')) + '</div>';
     html += '<div class="preview-text"><strong style="color:#fff">Address:</strong> ' + escapeHtml(getPreviewVal('brand.address.line1')) + ', ' + escapeHtml(getPreviewVal('brand.address.line2')) + '</div>';
   }
+  // ── Industries Preview ──
+  else if (pageName === 'Industries') {
+    html += '<div class="section-label">Industries We Serve</div>';
+    html += '<h1 class="preview-headline" style="font-size:24px">' + escapeHtml(getPreviewVal('industriesPage.hero.headline')) + '</h1>';
+    html += '<p class="preview-subtitle">' + escapeHtml(getPreviewVal('industriesPage.hero.subtitle')) + '</p>';
+    html += '<div class="preview-divider"></div>';
+    var industryNames = ['Manufacturing', 'SaaS and Technology', 'Banking and Financial Services', 'BPO and Business Services', 'Professional Services and Consulting'];
+    for (var i = 0; i < 5; i++) {
+      html += '<div class="preview-card">';
+      html += '<div class="preview-card-title">' + escapeHtml(getPreviewVal('industries.' + i + '.name')) + '</div>';
+      html += '<div class="preview-card-desc">' + escapeHtml(getPreviewVal('industries.' + i + '.description')) + '</div>';
+      html += '<div style="margin-top:6px">';
+      for (var p = 0; p < 5; p++) {
+        var persona = getPreviewVal('industries.' + i + '.personas.' + p);
+        if (persona) html += '<span class="preview-persona">' + escapeHtml(persona) + '</span> ';
+      }
+      html += '</div></div>';
+    }
+  }
+  // ── How It Works Preview ──
+  else if (pageName === 'How It Works') {
+    html += '<div class="section-label">How It Works</div>';
+    html += '<h1 class="preview-headline" style="font-size:24px">' + escapeHtml(getPreviewVal('howItWorks.hero.headline')) + '</h1>';
+    html += '<p class="preview-subtitle">' + escapeHtml(getPreviewVal('howItWorks.hero.subtitle')) + '</p>';
+    html += '<div class="preview-divider"></div>';
+    html += '<div class="preview-section-title">' + escapeHtml(getPreviewVal('howItWorks.summaryHeadline')) + '</div>';
+    for (var i = 0; i < 8; i++) {
+      html += '<div class="preview-step">';
+      html += '<div class="preview-step-num">' + (i+1) + '</div>';
+      html += '<div class="preview-step-content">';
+      html += '<div class="preview-step-title">' + escapeHtml(getPreviewVal('howItWorks.steps.' + i + '.title')) + '</div>';
+      html += '<div class="preview-step-desc">' + escapeHtml(getPreviewVal('howItWorks.steps.' + i + '.description')) + '</div>';
+      html += '<div style="font-size:10px;color:#00C896;margin-top:2px">Output: ' + escapeHtml(getPreviewVal('howItWorks.steps.' + i + '.output')) + '</div>';
+      html += '</div></div>';
+    }
+  }
+  // ── Pricing Page Preview ──
+  else if (pageName === 'Pricing Page') {
+    html += '<div class="section-label">Pricing</div>';
+    html += '<h1 class="preview-headline" style="font-size:24px">' + escapeHtml(getPreviewVal('pricingPage.hero.headline')) + '</h1>';
+    html += '<p class="preview-subtitle">' + escapeHtml(getPreviewVal('pricingPage.hero.subtitle')) + '</p>';
+    html += '<div class="preview-divider"></div>';
+    html += '<div class="preview-section-title">' + escapeHtml(getPreviewVal('pricingPage.comparisonHeadline')) + '</div>';
+    var solNames = ['Revenue Intelligence', 'Pipeline Builder', 'Revenue Engine', 'AI Adoption Journey', 'Fractional Revenue Office'];
+    for (var i = 0; i < 5; i++) {
+      html += '<div class="preview-card"' + (String(getPreviewVal('solutions.' + i + '.isPopular')) === 'true' ? ' style="border-color:#FFB800"' : '') + '>';
+      html += '<div class="preview-card-title">' + escapeHtml(getPreviewVal('solutions.' + i + '.name'));
+      if (String(getPreviewVal('solutions.' + i + '.isPopular')) === 'true') {
+        html += ' <span style="font-size:10px;background:#FFB800;color:#0F1B2D;padding:1px 6px;border-radius:8px;font-weight:600;margin-left:6px">' + escapeHtml(getPreviewVal('pricingPage.popularBadge')) + '</span>';
+      }
+      html += '</div>';
+      html += '<div class="preview-price">' + escapeHtml(getPreviewVal('solutions.' + i + '.price')) + '</div>';
+      html += '<div class="preview-card-desc">' + escapeHtml(getPreviewVal('solutions.' + i + '.description')) + '</div>';
+      html += '</div>';
+    }
+  }
   // ── Generic Page Preview ──
   else {
     html += '<div class="section-label">' + escapeHtml(pageName) + '</div>';
