@@ -8,7 +8,7 @@
  * Set in Cloudflare Pages Dashboard → Settings → Environment variables
  */
 
-const REPO_OWNER = 'client-coder';
+const REPO_OWNER = 'myelektra';
 const REPO_NAME = 'glm-weebly-theme';
 const FILE_PATH = 'content-config.json';
 const BRANCH = 'master';

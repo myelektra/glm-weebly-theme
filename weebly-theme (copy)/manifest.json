@@ -1,0 +1,73 @@
+{
+  "title": "Myelektra Revenue Theme",
+  "version": "1.0.0",
+  "author": "Myelektra",
+  "description": "AI-Powered Revenue Growth Partner — Complete custom theme for Myelektra.com with all content hardcoded into template files.",
+  "layouts": {
+    "default": {
+      "name": "Homepage",
+      "default": true,
+      "file": "index.html"
+    },
+    "solutions": {
+      "name": "Solutions",
+      "file": "solutions.html"
+    },
+    "solution-revenue-intelligence": {
+      "name": "Revenue Intelligence",
+      "file": "solution-revenue-intelligence.html"
+    },
+    "solution-pipeline-builder": {
+      "name": "Pipeline Builder",
+      "file": "solution-pipeline-builder.html"
+    },
+    "solution-revenue-engine": {
+      "name": "Revenue Engine",
+      "file": "solution-revenue-engine.html"
+    },
+    "solution-ai-sales-transformation": {
+      "name": "AI Sales Transformation",
+      "file": "solution-ai-sales-transformation.html"
+    },
+    "solution-fractional-revenue-office": {
+      "name": "Fractional Revenue Office",
+      "file": "solution-fractional-revenue-office.html"
+    },
+    "industries": {
+      "name": "Industries",
+      "file": "industries.html"
+    },
+    "how-it-works": {
+      "name": "How It Works",
+      "file": "how-it-works.html"
+    },
+    "pricing": {
+      "name": "Pricing",
+      "file": "pricing.html"
+    },
+    "academy": {
+      "name": "Myelektra Academy",
+      "file": "academy.html"
+    },
+    "about": {
+      "name": "About",
+      "file": "about.html"
+    },
+    "consultation": {
+      "name": "Book Consultation",
+      "file": "consultation.html"
+    },
+    "get-quote": {
+      "name": "Get Quote",
+      "file": "get-quote-here-new.html"
+    },
+    "contact": {
+      "name": "Contact Us",
+      "file": "contact-new.html"
+    },
+    "template": {
+      "name": "Template (Editor)",
+      "file": "template.html"
+    }
+  }
+}
