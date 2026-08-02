@@ -9,7 +9,9 @@
   --navy-dark: #0B1120;
   --blue: #1A73E8;
   --blue-hover: #1558B0;
-  --teal: #1877F2;
+  /* Accent: darkened from #1877F2 (4.23:1 — failed WCAG AA on white)
+     to #1565D8 (5.4:1) so 14px labels and white-on-accent buttons pass. */
+  --teal: #1565D8;
   --teal-hover: #1558B0;
   --bg-light: #F7F9FC;
   --bg-dark: #0B1120;
@@ -21,10 +23,40 @@
   --border: #E2E8F0;
   --border-dark: rgba(255, 255, 255, 0.2); 
   --gold: #FFB800;
+  /* Text on gold must be near-black (#0B1120 = 10.9:1); #0052CC was 3.93:1. */
+  --on-gold: #0B1120;
+  --section-dark-bg: #0052CC;
+  /* Accent for dark backgrounds. The darkened --teal only reaches 3.5:1 on the
+     near-black footer, so dark surfaces use a lighter tint (6.7:1). */
+  --teal-on-dark: #4A9BFF;
+
   --font-heading: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
   --font-body: "Inter", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", "Source Code Pro", monospace;
   --max-width: 1200px;
+
+  /* --- Spacing scale (4 / 8 / 16 / 24 / 32 / 48 / 64) --- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* --- Radius scale --- */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-pill: 999px;
+
+  /* --- Elevation scale: tight dark shadow + soft atmospheric shadow --- */
+  --shadow-sm: 0 1px 2px rgba(15, 27, 45, 0.06), 0 1px 3px rgba(15, 27, 45, 0.10);
+  --shadow-md: 0 2px 4px rgba(15, 27, 45, 0.06), 0 4px 8px rgba(15, 27, 45, 0.08);
+  --shadow-lg: 0 4px 8px rgba(15, 27, 45, 0.06), 0 12px 24px rgba(15, 27, 45, 0.10);
+  --shadow-xl: 0 8px 16px rgba(15, 27, 45, 0.08), 0 24px 40px rgba(15, 27, 45, 0.14);
 }
 
 /* --- Reset & Base --- */
@@ -105,7 +137,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .site-header.scrolled {
   background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(12px);
-  box-shadow: 0 4px 24px rgba(15, 27, 45, 0.06);
+  box-shadow: var(--shadow-sm);
   border-bottom: 1px solid var(--border);
 }
 
@@ -141,7 +173,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .nav-dropdown-menu {
   display: none; position: absolute; top: 100%; left: 0; margin-top: 4px;
   width: 256px; background: #fff; border-radius: 12px;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.15); border: 1px solid var(--border);
+  box-shadow: var(--shadow-xl); border: 1px solid var(--border);
   padding: 8px 0; z-index: 50;
 }
 .nav-dropdown:hover .nav-dropdown-menu { display: block; }
@@ -250,7 +282,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 }
 
 .hero-content { position: relative; max-width: 720px; padding: 128px 0; z-index: 2; }
-@media (min-width: 1024px) { .hero-content { padding: 160px 0; } }
+@media (min-width: 1024px) { .hero-content { padding: 160px 0; } } /* hero: intentional oversize */
 
 .hero-badge {
   display: inline-flex; align-items: center;
@@ -317,7 +349,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .btn-ghost:hover { background: rgba(26,115,232,0.2); }
 .btn-large {
   padding: 16px 32px; font-size: 18px; font-weight: 700;
-  box-shadow: 0 8px 24px rgba(24, 119, 242, 0.15);
+  box-shadow: var(--shadow-md);
 }
 
 /* ============================================
@@ -325,21 +357,21 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
    ============================================ */
 .card {
   background: #fff; border: 1px solid var(--border);
-  border-radius: 12px; padding: 28px;
+  border-radius: var(--radius-lg); padding: var(--space-8);
   transition: transform 0.3s, box-shadow 0.3s;
 }
-.card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.1); }
+.card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
 
 .card-dark {
   background: rgba(255, 255, 255, 0.08); 
   border: 1px solid var(--border-dark);
-  border-radius: 12px; padding: 28px;
+  border-radius: var(--radius-lg); padding: var(--space-8);
   transition: transform 0.3s, box-shadow 0.3s;
 }
 .card-dark:hover { 
   transform: translateY(-4px); 
   background: rgba(255, 255, 255, 0.12);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15); 
+  box-shadow: var(--shadow-lg); 
 }
 
 .card-icon {
@@ -352,9 +384,12 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .card-icon-gradient { background: linear-gradient(135deg, rgba(24, 119, 242, 0.1), rgba(26,115,232,0.1)); color: var(--blue); }
 
 .card-title {
-  font-size: 18px; font-weight: 700; margin-bottom: 8px;
+  font-size: 18px; font-weight: 700; margin-bottom: var(--space-2);
   font-family: var(--font-heading);
 }
+/* Cards on dark/royal-blue sections own their text color in CSS,
+   so no page needs inline `style="color:#fff"`. */
+.card-dark .card-title { color: var(--text-dark); }
 .card-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
 .card-desc-dark { font-size: 14px; color: var(--text-dark-secondary); line-height: 1.7; }
 
@@ -416,10 +451,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 
 .timeline-indicator { display: flex; flex-direction: column; align-items: center; }
 .timeline-dot {
-  width: 56px; height: 56px; border-radius: 50%;
+  width: 48px; height: 48px; border-radius: 50%;
   background: linear-gradient(135deg, var(--teal), var(--blue));
   display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; box-shadow: 0 4px 16px rgba(24, 119, 242, 0.2);
+  flex-shrink: 0; box-shadow: var(--shadow-md);
 }
 .timeline-dot span { color: #fff; font-weight: 700; font-size: 16px; font-family: var(--font-mono); }
 .timeline-line {
@@ -447,9 +482,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
    SOLUTION CARDS (VARIASI PUTIH BERSIH & PREMIUM)
    ============================================ */
 .solution-card {
-  background: #ffffff; /* Mengubah latar belakang menjadi putih bersih */
+  background: #ffffff; /* Kartu putih bersih di atas section royal blue */
   border: 1px solid rgba(255, 255, 255, 0.4); /* Border tipis halus */
-  border-radius: 12px; padding: 28px;
+  border-radius: var(--radius-lg); padding: var(--space-8);
   display: flex; flex-direction: column;
   /* Efek transisi warna & shadow yang halus */
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
@@ -457,36 +492,38 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
               border-color 0.3s ease, 
               background-color 0.3s ease;
   position: relative;
-  box-shadow: 0 4px 20px rgba(0, 82, 204, 0.06);
+  box-shadow: var(--shadow-md);
 }
 
 /* Modifikasi Efek Animasi Saat Hover */
 .solution-card:hover { 
-  transform: translateY(-6px); 
+  transform: translateY(-4px); 
   border-color: rgba(255, 255, 255, 0.8);
-  /* Memberikan shadow glow lembut warna biru agar menyatu dengan latar Royal Blue */
-  box-shadow: 0 20px 38px rgba(0, 40, 120, 0.25); 
+  box-shadow: var(--shadow-xl);
 }
 
 /* Penyesuaian Jika Kartu Terpilih (Featured) */
 .solution-card.featured { 
   border: 2px solid var(--gold); 
-  box-shadow: 0 8px 30px rgba(255, 184, 0, 0.2);
+  box-shadow: var(--shadow-lg);
 }
 
 .badge-popular {
-  position: absolute; top: -12px; left: 24px;
-  padding: 4px 12px; background: var(--gold); color: #0052CC; 
-  font-size: 12px; font-weight: 700; border-radius: 999px;
+  position: absolute; top: -12px; left: var(--space-6);
+  padding: var(--space-1) var(--space-3);
+  background: var(--gold); color: var(--on-gold);
+  font-size: 12px; font-weight: 700; border-radius: var(--radius-pill);
   z-index: 2;
 }
 
-/* Mengubah font judul kartu menjadi gelap agar kontras di atas kartu putih */
+/* Judul kartu wajib gelap: kartu ini berlatar putih.
+   `!important` menetralkan sisa inline `style="color:#fff"` di HTML lama,
+   yang membuat judul tak terlihat (kontras 1:1). */
 .solution-card .card-title {
-  color: var(--navy);
+  color: var(--navy) !important;
   font-size: 20px;
   font-weight: 700;
-  margin-bottom: 8px;
+  margin-bottom: var(--space-2);
 }
 
 /* Mengubah deskripsi utama di dalam kartu putih */
@@ -534,7 +571,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   border-radius: 12px; padding: 24px;
   transition: transform 0.3s, box-shadow 0.3s;
 }
-.country-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.08); }
+.country-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
 
 .flag-accent-indonesia { border-top: 3px solid #FF0000; }
 .flag-accent-malaysia { border-top: 3px solid #006600; }
@@ -546,7 +583,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 
 .persona-dot {
   width: 6px; height: 6px; border-radius: 50%; background: var(--teal);
-  flex-shrink: 0; margin-top: 7px;
+  flex-shrink: 0; margin-top: 8px;
 }
 
 /* ============================================
@@ -559,10 +596,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   transition: transform 0.3s, box-shadow 0.3s;
   position: relative;
 }
-.pricing-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.1); }
+.pricing-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
 .pricing-card.featured {
   border: 2px solid var(--gold);
-  box-shadow: 0 8px 32px rgba(255,184,0,0.15);
+  box-shadow: var(--shadow-lg);
 }
 
 .pricing-price {
@@ -610,6 +647,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 @media (min-width: 768px) { .footer-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 1024px) { .footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; } }
 
+/* Any accent text inside the near-black footer uses the light tint. */
+.site-footer [style*="--teal"],
+.site-footer .footer-accent { color: var(--teal-on-dark) !important; }
+
 .footer-heading {
   font-size: 12px; font-weight: 600; color: #fff;
   text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px;
@@ -619,7 +660,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   display: block; font-size: 14px; color: rgba(232,236,241,0.6);
   padding: 4px 0; transition: color 0.2s;
 }
-.footer-link:hover { color: var(--teal); }
+.footer-link:hover { color: var(--teal-on-dark); }
 .footer-divider { border-top: 1px solid rgba(255,255,255,0.1); margin-top: 48px; padding-top: 32px; }
 .footer-disclaimer { font-size: 12px; color: rgba(232,236,241,0.4); line-height: 1.6; margin-bottom: 16px; }
 .footer-copy { font-size: 12px; color: rgba(232,236,241,0.4); }
@@ -627,10 +668,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 /* ============================================
    CLIENT LOGOS MARQUEE
    ============================================ */
-.experience-section { background: var(--bg-light); padding: 48px 0 56px; }
+.experience-section { background: var(--bg-light); padding: var(--space-12) 0; }
 .marquee-track { display: flex; width: max-content; }
 .marquee-track:hover { animation-play-state: paused; }
-.marquee-logo { flex-shrink: 0; height: 36px; width: auto; opacity: 0.7; transition: opacity 0.3s; margin: 0 28px; object-fit: contain; }
+.marquee-logo { flex-shrink: 0; height: 36px; width: auto; opacity: 0.7; transition: opacity 0.3s; margin: 0 var(--space-8); object-fit: contain; }
 .marquee-logo:hover { opacity: 1; }
 @keyframes marquee { 0% { transform: translateX(1px); } 100% { transform: translateX(-50%); } }
 
@@ -658,7 +699,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   width: 40px; height: 40px; border-radius: 50%;
   background: var(--blue); color: #fff;
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 12px rgba(26,115,232,0.3);
+  box-shadow: var(--shadow-md);
   opacity: 0; visibility: hidden;
   transition: opacity 0.3s, visibility 0.3s, background 0.2s;
 }
@@ -671,7 +712,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .cookie-banner {
   position: fixed; bottom: 0; left: 0; right: 0; z-index: 50;
   background: #fff; border-top: 1px solid var(--border);
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 -2px 4px rgba(15,27,45,0.04), 0 -8px 24px rgba(15,27,45,0.08);
   padding: 16px 24px;
 }
 .cookie-inner {
@@ -814,11 +855,11 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   transition: transform 0.3s, box-shadow 0.3s;
   position: relative;
 }
-.academy-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.1); }
+.academy-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
 .academy-card.featured { border: 2px solid rgba(255,184,0,0.5); }
 .academy-badge {
   position: absolute; top: -12px; right: 24px;
-  padding: 4px 12px; background: var(--gold); color: var(--navy-dark);
+  padding: 4px 12px; background: var(--gold); color: var(--on-gold);
   font-size: 12px; font-weight: 700; border-radius: 999px;
 }
 
@@ -868,7 +909,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   display: flex; flex-direction: column;
   transition: transform 0.3s, box-shadow 0.3s;
 }
-.article-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.1); }
+.article-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
 .article-thumb {
   height: 192px; background: linear-gradient(135deg, var(--navy-dark), var(--blue));
   display: flex; align-items: center; justify-content: center;
@@ -910,7 +951,38 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   .card { padding: 20px; }
   .card-dark { padding: 20px; }
   .timeline-item { gap: 16px; }
-  .timeline-dot { width: 44px; height: 44px; }
+  .timeline-dot { width: 40px; height: 40px; }
   .timeline-dot span { font-size: 14px; }
   .pricing-card { padding: 24px; }
+}
+
+/* ============================================
+   REDUCED MOTION (accessibility)
+   Honours OS-level "reduce motion". Scroll-reveal elements are
+   forced visible so content can never be stranded at opacity:0.
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .anim, .anim-slide {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .hero-orb-1, .hero-orb-2 { animation: none !important; }
+  .marquee-track { animation: none !important; }
+
+  .card:hover, .card-dark:hover, .solution-card:hover,
+  .pricing-card:hover, .country-card:hover,
+  .academy-card:hover, .article-card:hover {
+    transform: none !important;
+  }
 }
